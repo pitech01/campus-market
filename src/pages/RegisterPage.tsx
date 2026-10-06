@@ -7,6 +7,7 @@ export default function RegisterPage() {
   const navigate = useNavigate()
   const { register, isAuthenticated } = useAuth()
 
+  const [accountIntent, setAccountIntent] = useState<'both' | 'buyer' | 'seller'>('both')
   const [form, setForm] = useState({
     name: '',
     student_id: '',
@@ -103,6 +104,74 @@ export default function RegisterPage() {
           <div className="login-inspo-header">
             <h1 className="login-inspo-title">Create account</h1>
             <p className="login-inspo-subtitle">Enter your Lincoln University student details to register</p>
+          </div>
+
+          {/* Account Role / Intent Selector */}
+          <div style={{ marginBottom: 18 }}>
+            <label className="inspo-label" style={{ marginBottom: 8, display: 'block' }}>
+              I want to join primarily as:
+            </label>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8 }}>
+              <button
+                type="button"
+                onClick={() => setAccountIntent('buyer')}
+                style={{
+                  padding: '9px 4px',
+                  borderRadius: 8,
+                  fontSize: 12,
+                  fontWeight: 700,
+                  border: accountIntent === 'buyer' ? '2px solid #059669' : '1px solid #e2e8f0',
+                  background: accountIntent === 'buyer' ? '#ecfdf5' : '#f8fafc',
+                  color: accountIntent === 'buyer' ? '#065f46' : '#64748b',
+                  cursor: 'pointer',
+                  textAlign: 'center',
+                  transition: 'all 0.15s ease',
+                }}
+              >
+                🛒 Buyer
+              </button>
+              <button
+                type="button"
+                onClick={() => setAccountIntent('seller')}
+                style={{
+                  padding: '9px 4px',
+                  borderRadius: 8,
+                  fontSize: 12,
+                  fontWeight: 700,
+                  border: accountIntent === 'seller' ? '2px solid #7c3aed' : '1px solid #e2e8f0',
+                  background: accountIntent === 'seller' ? '#f5f3ff' : '#f8fafc',
+                  color: accountIntent === 'seller' ? '#5b21b6' : '#64748b',
+                  cursor: 'pointer',
+                  textAlign: 'center',
+                  transition: 'all 0.15s ease',
+                }}
+              >
+                🏷️ Seller
+              </button>
+              <button
+                type="button"
+                onClick={() => setAccountIntent('both')}
+                style={{
+                  padding: '9px 4px',
+                  borderRadius: 8,
+                  fontSize: 12,
+                  fontWeight: 700,
+                  border: accountIntent === 'both' ? '2px solid #2563eb' : '1px solid #e2e8f0',
+                  background: accountIntent === 'both' ? '#eff6ff' : '#f8fafc',
+                  color: accountIntent === 'both' ? '#1e40af' : '#64748b',
+                  cursor: 'pointer',
+                  textAlign: 'center',
+                  transition: 'all 0.15s ease',
+                }}
+              >
+                ⚡ Both
+              </button>
+            </div>
+            <p style={{ fontSize: 11, color: '#64748b', marginTop: 6 }}>
+              {accountIntent === 'buyer' && '✓ Browse verified student listings, chat with sellers, save favorites & propose deals.'}
+              {accountIntent === 'seller' && '✓ Post campus items, set prices or swap items, accept deals & receive buyer reviews.'}
+              {accountIntent === 'both' && '✓ Full all-in-one access: buy items, post listings, exchange & chat with classmates.'}
+            </p>
           </div>
 
           {generalError && (
