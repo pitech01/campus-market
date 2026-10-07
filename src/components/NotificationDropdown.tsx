@@ -134,7 +134,7 @@ export const NotificationDropdown: React.FC = () => {
                       {n.type.includes('Deal') ? (
                         <Handshake className="w-4 h-4 text-emerald-600" />
                       ) : n.type.includes('Message') ? (
-                        <MessageSquare className="w-4 h-4 text-blue-600" />
+                        <MessageSquare className="w-4 h-4 text-red-600" />
                       ) : (
                         <Megaphone className="w-4 h-4 text-amber-600" />
                       )}

@@ -1,44 +1,58 @@
 @import "tailwindcss";
 
 :root {
-  /* Brand colors — white & blue */
-  --primary: #2563eb;
-  --primary-hover: #1d4ed8;
+  /* Brand colors — Lincoln Crimson & Variants of Red */
+  --primary: #dc2626; /* Crimson Red */
+  --primary-hover: #b91c1c; /* Deep Crimson */
+  --primary-active: #991b1b; /* Dark Ruby Red */
   --primary-contrast: #ffffff;
 
-  --navy: #0f1f3d;
-  --navy-hover: #16294f;
+  --navy: #190a0d; /* Deep Burgundy / Maroon Noir */
+  --navy-hover: #290e14;
 
-  --accent-blue: #2563eb;
-  --accent-blue-hover: #1d4ed8;
-  --accent-blue-light: #eaf1ff;
+  /* Red Palette Variants */
+  --accent-red: #dc2626; /* Standard Crimson */
+  --accent-red-hover: #b91c1c;
+  --accent-red-light: #fef2f2; /* Soft Rose tint for badges / hero background */
+  --accent-red-subtle: #fee2e2;
 
-  --accent-orange: #f97316;
-  --accent-orange-hover: #ea580c;
+  --accent-scarlet: #ef4444; /* Vibrant Scarlet */
+  --accent-ruby: #e11d48; /* Ruby / Rose Red */
+  --accent-crimson: #991b1b; /* Dark Crimson */
+  --accent-wine: #881337; /* Deep Wine Burgundy */
+  --accent-rose: #f43f5e; /* Bright Coral Rose */
+
+  /* Legacy alias mappings for seamless component compatibility */
+  --accent-blue: #dc2626;
+  --accent-blue-hover: #b91c1c;
+  --accent-blue-light: #fef2f2;
+
+  --accent-orange: #ea580c;
+  --accent-orange-hover: #c2410c;
   --accent-orange-light: #fff7ed;
 
   --accent-green: #10b981;
   --accent-green-hover: #059669;
   --accent-green-light: #ecfdf5;
 
-  --destructive: #e11d48;
-  --destructive-light: #fef1f4;
+  --destructive: #dc2626;
+  --destructive-light: #fef2f2;
 
-  /* Surfaces & neutrals (Light theme default) */
-  --bg: #f5f8fd;
+  /* Surfaces & neutrals (Warm light canvas with subtle rose undertones) */
+  --bg: #fcf8f8;
   --surface: #ffffff;
   --surface-raised: #ffffff;
-  --surface-subtle: #eef3fc;
-  --surface-active: #dfe9fa;
+  --surface-subtle: #fbf0f0;
+  --surface-active: #fde6e6;
 
-  --text: #0f172a;
-  --text-h: #0b1526;
-  --text-muted: #5b6b85;
-  --text-soft: #93a2ba;
+  --text: #190f11;
+  --text-h: #110507;
+  --text-muted: #6e585b;
+  --text-soft: #9e888b;
 
-  --border: #dde7f7;
-  --border-focus: #3b82f6;
-  --ring: rgba(37, 99, 235, 0.2);
+  --border: #f3dede;
+  --border-focus: #dc2626;
+  --ring: rgba(220, 38, 38, 0.22);
 
   --shadow-xs: none;
   --shadow-sm: none;

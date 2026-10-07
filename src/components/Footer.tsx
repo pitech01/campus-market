@@ -1,49 +1,52 @@
 import { Link } from 'react-router-dom'
-import { Heart } from 'lucide-react'
+import { Heart, ShieldCheck, Mail } from 'lucide-react'
 import Icon from './Icon'
 
 export default function Footer() {
   return (
     <footer className="footer">
       <div className="footer-inner">
+        {/* Brand & Mission Column */}
         <div className="footer-brand-column">
-          <Link className="brand" to="/">
+          <Link className="brand" to="/" aria-label="Lincoln Campus Market Home">
             <div className="brand-badge">
-              <span className="brand-logo-text">N</span>
+              <span className="brand-logo-text">LUC</span>
             </div>
             <div className="brand-text-group">
-              <span className="brand-name">Nussy</span>
-              <span className="brand-campus-pill">LUC Campus</span>
+              <span className="brand-name">Campus Market</span>
+              <span className="brand-campus-pill">Lincoln Uni</span>
             </div>
           </Link>
           <p className="footer-desc">
-            The dedicated verified peer-to-peer marketplace for Lincoln University College students to trade textbooks, electronics, and dorm living essentials.
+            The verified peer-to-peer student marketplace for Lincoln University College, Malaysia. Safely buy, sell, and exchange textbooks, electronics, and hostel essentials.
           </p>
           <div className="footer-campus-badge">
-            <Icon name="icon-shield" />
+            <ShieldCheck className="w-4 h-4 text-emerald-500 flex-shrink-0" />
             <span>Official Student Project · Lincoln University College</span>
           </div>
           <div className="footer-social-row">
-            <a href="#" className="footer-social-btn" aria-label="Facebook">
+            <a href="https://facebook.com" target="_blank" rel="noreferrer" className="footer-social-btn" aria-label="Facebook">
               <Icon name="icon-facebook" />
             </a>
-            <a href="#" className="footer-social-btn" aria-label="Instagram">
+            <a href="https://instagram.com" target="_blank" rel="noreferrer" className="footer-social-btn" aria-label="Instagram">
               <Icon name="icon-instagram" />
             </a>
-            <a href="#" className="footer-social-btn" aria-label="LinkedIn">
+            <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="footer-social-btn" aria-label="LinkedIn">
               <Icon name="icon-linkedin" />
             </a>
           </div>
         </div>
 
+        {/* Links Grid */}
         <div className="footer-links-grid">
           <div className="footer-column">
             <h4>Marketplace</h4>
             <ul>
               <li><Link to="/#categories">Textbooks & Notes</Link></li>
               <li><Link to="/#categories">Electronics & Laptops</Link></li>
-              <li><Link to="/#categories">Hostel Furniture</Link></li>
+              <li><Link to="/#categories">Hostel & Living</Link></li>
               <li><Link to="/#categories">Student Fashion</Link></li>
+              <li><Link to="/listings/new">Post an Item (+)</Link></li>
             </ul>
           </div>
 
@@ -51,34 +54,37 @@ export default function Footer() {
             <h4>Campus & Safety</h4>
             <ul>
               <li><Link to="/#trust">Verification Process</Link></li>
-              <li><Link to="/#trust">Safe Meetup Spots</Link></li>
-              <li><Link to="/listings/new">List an Item for Free</Link></li>
+              <li><Link to="/#trust">Safe Campus Meetup Spots</Link></li>
+              <li><Link to="/deals">My Deals & Escrow</Link></li>
+              <li><Link to="/favorites">Saved Favourites</Link></li>
               <li><Link to="/profile">My Student Hub</Link></li>
             </ul>
           </div>
 
           <div className="footer-column">
-            <h4>Get To Know Us</h4>
+            <h4>Get In Touch</h4>
             <ul>
-              <li><Link to="/#top">About Nussy Store</Link></li>
+              <li><Link to="/#top">About LUC Marketplace</Link></li>
               <li><Link to="/register">Join as a Student</Link></li>
-              <li><Link to="/login">Log In</Link></li>
-              <li><Link to="/profile?tab=saved">Saved Items</Link></li>
+              <li><Link to="/login">Student Log In</Link></li>
+              <li><a href="mailto:info@nussy.rabanigeo.com" className="inline-flex items-center gap-1"><Mail className="w-3.5 h-3.5 inline text-red-500" /> Support Desk</a></li>
             </ul>
           </div>
         </div>
       </div>
 
+      {/* Bottom Bar */}
       <div className="footer-bottom">
         <div className="footer-bottom-inner">
-          <p className="inline-flex items-center gap-1.5">
-            <span>© {new Date().getFullYear()} Nussy Store. Created with</span>
-            <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500 inline" />
-            <span>for LUC Campus Community.</span>
+          <p className="footer-copyright">
+            <span>© {new Date().getFullYear()} Lincoln Campus Market. Built with</span>
+            <Heart className="w-3.5 h-3.5 text-red-500 fill-red-500 inline mx-1 flex-shrink-0" />
+            <span>for LUC Student Community.</span>
           </p>
           <div className="footer-badges">
             <span className="footer-secure-pill">
-              <Icon name="icon-check-circle" /> 100% Student Verified
+              <ShieldCheck className="w-4 h-4 text-emerald-500 inline mr-1" />
+              <span>100% Student Verified</span>
             </span>
           </div>
         </div>
@@ -86,4 +92,5 @@ export default function Footer() {
     </footer>
   )
 }
+
 
