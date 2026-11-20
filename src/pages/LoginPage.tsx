@@ -1,11 +1,14 @@
-import { useState, type FormEvent } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useState, useEffect, type FormEvent } from 'react'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { ArrowLeft, Zap, ShieldCheck, AlertCircle } from 'lucide-react'
 import { useAuth } from '../lib/authContext'
 
 export default function LoginPage() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const { login, isAuthenticated } = useAuth()
+
+  const redirectUrl = searchParams.get('redirect') || '/profile'
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -14,9 +17,11 @@ export default function LoginPage() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
 
   // Redirect if already logged in
-  if (isAuthenticated) {
-    navigate('/profile')
-  }
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate(redirectUrl, { replace: true })
+    }
+  }, [isAuthenticated, navigate, redirectUrl])
 
   const handleFillDemo = () => {
     setEmail('nusaiba@lincoln.edu.my')
@@ -32,7 +37,7 @@ export default function LoginPage() {
     const res = await login(email, password)
 
     if (res.success) {
-      navigate('/profile')
+      navigate(redirectUrl, { replace: true })
     } else {
       setErrorMsg(res.message || 'The provided credentials are incorrect. Check your email or password.')
       setLoading(false)
@@ -44,7 +49,7 @@ export default function LoginPage() {
       {/* Left Form Panel */}
       <div className="login-inspo-left">
         <div className="login-inspo-brand">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5">
             <Link to="/" className="brand-logo-link">
               <svg className="brand-cube-icon" viewBox="0 0 24 24" fill="currentColor">
                 <rect x="3" y="3" width="7.5" height="7.5" rx="1.5" />
@@ -54,24 +59,25 @@ export default function LoginPage() {
               </svg>
               <span className="brand-title">CampusMarket</span>
             </Link>
-            <span className="brand-sub-badge">LUC Verified</span>
+            <span className="brand-sub-badge hidden sm:inline-flex">LUC Verified</span>
           </div>
 
-          <Link to="/" className="brand-back-btn">
+          <Link to="/" className="brand-back-btn" aria-label="Back to website">
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Back to website</span>
+            <span className="hidden sm:inline">Back to website</span>
+            <span className="sm:hidden">Back</span>
           </Link>
         </div>
 
         <div className="login-inspo-form-wrapper">
           <div className="login-inspo-header">
             <h1 className="login-inspo-title">Welcome back</h1>
-            <p className="login-inspo-subtitle">Please enter your details</p>
+            <p className="login-inspo-subtitle">Please enter your Lincoln student details</p>
           </div>
 
           {errorMsg && (
             <div className="inspo-alert inspo-alert-error" role="alert">
-              <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
+              <AlertCircle className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
               <span>{errorMsg}</span>
             </div>
           )}
@@ -85,7 +91,7 @@ export default function LoginPage() {
                 id="email"
                 type="email"
                 className="inspo-input"
-                placeholder="e.g. nusaiba@lincoln.edu.my or student@gmail.com"
+                placeholder="e.g. nusaiba@lincoln.edu.my"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -137,21 +143,28 @@ export default function LoginPage() {
               className="inspo-btn-demo"
               onClick={handleFillDemo}
             >
-              <Zap className="w-3.5 h-3.5 inline mr-1 text-red-600" />
-              <span>Quick Fill PRD Demo Student (Nusaiba / ID: 010240376)</span>
+              <Zap className="w-3.5 h-3.5 inline mr-1 text-red-600 shrink-0" />
+              <span className="hidden sm:inline">Quick Fill PRD Demo Student (Nusaiba / ID: 010240376)</span>
+              <span className="sm:hidden">Fill Demo Student (Nusaiba)</span>
             </button>
           </form>
 
           <p className="inspo-footer-prompt">
             Don't have an account?{' '}
-            <Link to="/register" className="inspo-signup-link">
+            <Link to={`/register${searchParams.get('redirect') ? `?redirect=${encodeURIComponent(searchParams.get('redirect')!)}` : ''}`} className="inspo-signup-link">
               Sign up
             </Link>
           </p>
+
+          {/* Mobile Campus Safety Note */}
+          <div className="login-mobile-trust-note md:hidden">
+            <ShieldCheck className="w-4 h-4 text-red-600 shrink-0" />
+            <span>Lincoln University College Official Campus Marketplace</span>
+          </div>
         </div>
       </div>
 
-      {/* Right Illustration Panel */}
+      {/* Right Illustration Panel (Desktop & Large Tablets) */}
       <div className="login-inspo-right">
         <div className="inspo-illustration-wrapper">
           <div className="inspo-art-card">

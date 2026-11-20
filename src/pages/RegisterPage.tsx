@@ -81,7 +81,7 @@ export default function RegisterPage() {
       {/* Left Form Panel */}
       <div className="login-inspo-left">
         <div className="login-inspo-brand">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5">
             <Link to="/" className="brand-logo-link">
               <svg className="brand-cube-icon" viewBox="0 0 24 24" fill="currentColor">
                 <rect x="3" y="3" width="7.5" height="7.5" rx="1.5" />
@@ -91,12 +91,13 @@ export default function RegisterPage() {
               </svg>
               <span className="brand-title">CampusMarket</span>
             </Link>
-            <span className="brand-sub-badge">LUC Verified</span>
+            <span className="brand-sub-badge hidden sm:inline-flex">LUC Verified</span>
           </div>
 
-          <Link to="/" className="brand-back-btn">
+          <Link to="/" className="brand-back-btn" aria-label="Back to website">
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Back to website</span>
+            <span className="hidden sm:inline">Back to website</span>
+            <span className="sm:hidden">Back</span>
           </Link>
         </div>
 
@@ -295,8 +296,9 @@ export default function RegisterPage() {
               className="inspo-btn-demo"
               onClick={handleFillDemo}
             >
-              <Zap className="w-3.5 h-3.5 inline mr-1 text-red-600" />
-              <span>Auto-fill PRD Student Demo Details</span>
+              <Zap className="w-3.5 h-3.5 inline mr-1 text-red-600 shrink-0" />
+              <span className="hidden sm:inline">Auto-fill PRD Student Demo Details</span>
+              <span className="sm:hidden">Fill Demo Student</span>
             </button>
           </form>
 

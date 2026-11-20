@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 import {
   Eye,
   ArrowLeftRight,
@@ -27,7 +27,8 @@ import type { Listing } from '../types'
 
 export default function ListingDetailPage() {
   const { id } = useParams<{ id: string }>()
-  const { user } = useAuth()
+  const navigate = useNavigate()
+  const { user, isAuthenticated } = useAuth()
 
   const [listing, setListing] = useState<Listing | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -102,6 +103,10 @@ export default function ListingDetailPage() {
   const meetingSpotName = listing.meeting_location?.name || listing.location || 'Lincoln Main Library'
 
   const handleFavoriteToggle = async () => {
+    if (!isAuthenticated) {
+      navigate(`/login?redirect=${encodeURIComponent(window.location.pathname)}`)
+      return
+    }
     try {
       const res = await toggleFavorite(listing.id)
       setIsFavorited(res.is_favorited)
@@ -260,7 +265,13 @@ export default function ListingDetailPage() {
                   type="button"
                   className="btn btn-primary btn-lg inline-flex items-center gap-2"
                   disabled={listing.status === 'sold'}
-                  onClick={() => setChatDrawerOpen(true)}
+                  onClick={() => {
+                    if (!isAuthenticated) {
+                      navigate(`/login?redirect=${encodeURIComponent(window.location.pathname)}`)
+                      return
+                    }
+                    setChatDrawerOpen(true)
+                  }}
                 >
                   <MessageSquare className="w-4 h-4" />
                   <span>Chat & Make Offer</span>
@@ -268,7 +279,7 @@ export default function ListingDetailPage() {
 
                 <button
                   type="button"
-                  className="btn btn-outline btn-lg inline-flex items-center gap-2"
+                  className="btn btn-outline btn-lg inline-flex items-center gap-2 border-red-600 text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30"
                   disabled={listing.status === 'sold'}
                   onClick={() => setPaystackModalOpen(true)}
                 >
@@ -280,7 +291,13 @@ export default function ListingDetailPage() {
                   type="button"
                   className="btn btn-outline btn-lg inline-flex items-center gap-2"
                   disabled={listing.status === 'sold'}
-                  onClick={() => setChatDrawerOpen(true)}
+                  onClick={() => {
+                    if (!isAuthenticated) {
+                      navigate(`/login?redirect=${encodeURIComponent(window.location.pathname)}`)
+                      return
+                    }
+                    setChatDrawerOpen(true)
+                  }}
                 >
                   <Sparkles className="w-4 h-4" />
                   <span>Propose Deal</span>

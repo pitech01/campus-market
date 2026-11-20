@@ -47,7 +47,7 @@ export const ResetPasswordPage: React.FC = () => {
       {/* Left Form Panel */}
       <div className="login-inspo-left">
         <div className="login-inspo-brand">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5">
             <Link to="/" className="brand-logo-link">
               <svg className="brand-cube-icon" viewBox="0 0 24 24" fill="currentColor">
                 <rect x="3" y="3" width="7.5" height="7.5" rx="1.5" />
@@ -57,12 +57,13 @@ export const ResetPasswordPage: React.FC = () => {
               </svg>
               <span className="brand-title">CampusMarket</span>
             </Link>
-            <span className="brand-sub-badge">LUC Verified</span>
+            <span className="brand-sub-badge hidden sm:inline-flex">LUC Verified</span>
           </div>
 
-          <Link to="/" className="brand-back-btn">
+          <Link to="/" className="brand-back-btn" aria-label="Back to website">
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Back to website</span>
+            <span className="hidden sm:inline">Back to website</span>
+            <span className="sm:hidden">Back</span>
           </Link>
         </div>
 

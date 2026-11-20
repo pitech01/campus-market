@@ -251,6 +251,7 @@ export async function confirmDealHandover(dealId: number | string): Promise<Deal
 export interface InitializePaymentPayload {
   deal_id?: number | string
   listing_id?: number | string
+  listing_title?: string
   amount?: number
   callback_url?: string
 }

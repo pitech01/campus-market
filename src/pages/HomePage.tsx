@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import Hero from '../components/Hero'
 import CategoryShowcase from '../components/CategoryShowcase'
 import ProductSpotlight from '../components/ProductSpotlight'
@@ -16,7 +16,8 @@ import NewsletterBar from '../components/NewsletterBar'
 import Icon from '../components/Icon'
 import { Link } from 'react-router-dom'
 import { mockListings } from '../data/mockListings'
-import type { CategoryId, ItemCondition } from '../types'
+import { getListings } from '../lib/api'
+import type { CategoryId, ItemCondition, Listing } from '../types'
 
 export default function HomePage() {
   const [query, setQuery] = useState('')
@@ -24,35 +25,58 @@ export default function HomePage() {
   const [sortOption, setSortOption] = useState<SortOption>('newest')
   const [selectedCondition, setSelectedCondition] = useState<ItemCondition | 'all'>('all')
   const [selectedLocation, setSelectedLocation] = useState<string>('all')
+  const [liveListings, setLiveListings] = useState<Listing[]>([])
+
+  useEffect(() => {
+    getListings()
+      .then((res) => {
+        if (res.data && res.data.length > 0) {
+          setLiveListings(res.data)
+        }
+      })
+      .catch(() => {})
+  }, [])
+
+  // Combine live database items with fallback mock listings
+  const allListings = useMemo(() => {
+    if (liveListings.length === 0) return mockListings
+    return [...liveListings, ...mockListings]
+  }, [liveListings])
 
   // Extract unique campus locations
   const locations = useMemo(() => {
     const locSet = new Set<string>()
-    mockListings.forEach((item) => {
+    allListings.forEach((item) => {
       const locStr = item.meeting_location?.name || item.location || 'Lincoln Campus'
       const primaryLoc = locStr.split('/')[0].trim()
       locSet.add(primaryLoc)
     })
     return Array.from(locSet)
-  }, [])
+  }, [allListings])
 
   // Calculate category counts
   const categoryCounts = useMemo(() => {
-    const counts: Record<string, number> = { all: mockListings.length }
-    mockListings.forEach((item) => {
-      counts[item.category] = (counts[item.category] || 0) + 1
+    const counts: Record<string, number> = { all: allListings.length }
+    allListings.forEach((item) => {
+      const catKey = (typeof item.category === 'object' && item.category !== null) 
+        ? (item.category as any).slug 
+        : item.category
+      counts[catKey] = (counts[catKey] || 0) + 1
     })
     return counts
-  }, [])
+  }, [allListings])
 
   // Filter & Sort logic
   const filteredListings = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase()
 
-    let results = mockListings.filter((listing) => {
+    let results = allListings.filter((listing) => {
       // Category filter
+      const catKey = (typeof listing.category === 'object' && listing.category !== null) 
+        ? (listing.category as any).slug 
+        : listing.category
       const matchesCategory =
-        activeCategory === 'all' || listing.category === activeCategory
+        activeCategory === 'all' || catKey === activeCategory
 
       // Search query filter (title, description, tags)
       const matchesQuery =

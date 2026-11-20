@@ -282,6 +282,55 @@ export default function ChatDrawer({
 
   if (!isOpen) return null
 
+  if (!isAuthenticated) {
+    const returnUrl = encodeURIComponent(window.location.pathname)
+    return (
+      <div className="fixed inset-0 z-50 overflow-hidden flex justify-end bg-slate-900/60 backdrop-blur-sm transition-opacity">
+        <div className="w-full max-w-md bg-white dark:bg-slate-900 shadow-2xl flex flex-col h-full border-l border-slate-200 dark:border-slate-800 p-6 justify-between">
+          <div>
+            <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-950 flex items-center justify-center text-red-600">
+                  <MessageSquare className="w-4 h-4" />
+                </div>
+                <h3 className="font-bold text-slate-900 dark:text-white">Campus Messenger</h3>
+              </div>
+              <button onClick={onClose} className="p-1 rounded text-slate-400 hover:text-slate-600">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="py-12 text-center">
+              <div className="w-16 h-16 rounded-full bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 flex items-center justify-center mx-auto mb-4 border border-red-100 dark:border-red-900/40">
+                <Lock className="w-8 h-8" />
+              </div>
+              <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Student Sign-In Required</h4>
+              <p className="text-sm text-slate-500 dark:text-slate-400 max-w-xs mx-auto mb-6">
+                To prevent spam and keep Lincoln University students safe, please sign in with your student account to message sellers and propose deals.
+              </p>
+              <div className="flex flex-col gap-3">
+                <a
+                  href={`/login?redirect=${returnUrl}`}
+                  className="btn btn-primary w-full py-2.5 text-center font-bold"
+                >
+                  Sign In to Chat
+                </a>
+                <a
+                  href={`/register?redirect=${returnUrl}`}
+                  className="btn btn-outline w-full py-2 text-center text-sm"
+                >
+                  Register Free Student Account
+                </a>
+              </div>
+            </div>
+          </div>
+          <div className="text-center text-xs text-slate-400 pb-2">
+            Lincoln University College Marketplace · Peer to Peer Safety
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   const activeDeal = activeConversation?.active_deal
   const otherUser = activeConversation?.other_user
   const listing = activeConversation?.listing
