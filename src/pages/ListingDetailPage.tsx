@@ -42,6 +42,17 @@ export default function ListingDetailPage() {
   useEffect(() => {
     if (!id) return
 
+    // If ID is a local mock ID (e.g. 'l1', 'l2', 'l3'), load directly from mock data to avoid unnecessary 404 network requests
+    if (typeof id === 'string' && /^l\d+$/i.test(id)) {
+      const mock = getListingById(id)
+      if (mock) {
+        setListing(mock)
+        setIsFavorited(false)
+        setIsLoading(false)
+        return
+      }
+    }
+
     setIsLoading(true)
     getListing(id)
       .then((data) => {

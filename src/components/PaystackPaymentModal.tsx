@@ -104,6 +104,55 @@ export default function PaystackPaymentModal({
     setErrorMsg(null)
     setIsAuthError(false)
 
+    const publicKey =
+      import.meta.env.VITE_PAYSTACK_PUBLIC_KEY ||
+      'pk_test_1547bb10f90e5a418cc62e479fbbb4390abdbf70'
+
+    // Priority 1: Official Paystack Inline Popup (Direct in browser)
+    // Runs on the student's device and completely avoids any server IP / Cloudflare blocks!
+    if (typeof (window as any).PaystackPop !== 'undefined' && publicKey) {
+      try {
+        const reference = 'nussy_pstk_' + Math.random().toString(36).substring(2, 9) + '_' + Date.now()
+        const amountInKobo = Math.round(finalAmount * 100)
+
+        const handler = (window as any).PaystackPop.setup({
+          key: publicKey,
+          email: user?.email || 'student@lincoln.edu.my',
+          amount: amountInKobo,
+          currency: activeListing?.currency === 'RM' ? 'MYR' : 'NGN',
+          ref: reference,
+          metadata: {
+            custom_fields: [
+              {
+                display_name: 'Campus Marketplace Item',
+                variable_name: 'item_title',
+                value: activeListing?.title || 'Campus Item',
+              },
+              {
+                display_name: 'Student Payer',
+                variable_name: 'student_name',
+                value: user?.name || 'Student',
+              },
+            ],
+          },
+          callback: function (response: any) {
+            // Escrow payment succeeded on Paystack!
+            const finalRef = response.reference || reference
+            window.location.href = `/deals?payment=success&reference=${finalRef}`
+          },
+          onClose: function () {
+            setLoading(false)
+          },
+        })
+
+        handler.openIframe()
+        return
+      } catch (inlineErr) {
+        console.warn('Paystack inline checkout error, falling back to server initialize:', inlineErr)
+      }
+    }
+
+    // Priority 2: Backend initialization fallback
     try {
       const callbackUrl = `${window.location.origin}/deals?payment=success`
       const res = await initializePayment({
