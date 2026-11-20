@@ -137,7 +137,7 @@ export default function LoginPage() {
               className="inspo-btn-demo"
               onClick={handleFillDemo}
             >
-              <Zap className="w-3.5 h-3.5 inline mr-1 text-purple-600" />
+              <Zap className="w-3.5 h-3.5 inline mr-1 text-red-600" />
               <span>Quick Fill PRD Demo Student (Nusaiba / ID: 010240376)</span>
             </button>
           </form>

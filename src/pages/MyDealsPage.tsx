@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import {
   Handshake,
   Package,
@@ -9,6 +9,9 @@ import {
   Sparkles,
   Star,
   ArrowRight,
+  Lock,
+  ShieldCheck,
+  AlertCircle,
 } from 'lucide-react'
 import type { Deal } from '../types'
 import {
@@ -18,8 +21,10 @@ import {
   cancelDeal,
   confirmDealHandover,
   submitReview,
+  verifyPayment,
 } from '../lib/api'
 import { useAuth } from '../lib/authContext'
+import PaystackPaymentModal from '../components/PaystackPaymentModal'
 
 export default function MyDealsPage() {
   const { user, isAuthenticated } = useAuth()
@@ -33,6 +38,40 @@ export default function MyDealsPage() {
   const [rating, setRating] = useState(5)
   const [comment, setComment] = useState('')
   const [isSubmittingReview, setIsSubmittingReview] = useState(false)
+
+  // Paystack Escrow Payment Modal & Feedback
+  const [searchParams, setSearchParams] = useSearchParams()
+  const [selectedPaystackDeal, setSelectedPaystackDeal] = useState<Deal | null>(null)
+  const [paymentFeedback, setPaymentFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null)
+
+  // Auto-verify when user returns from Paystack redirect
+  useEffect(() => {
+    const ref = searchParams.get('reference')
+    if (ref && isAuthenticated) {
+      verifyPayment(ref)
+        .then((res) => {
+          setPaymentFeedback({
+            type: 'success',
+            message: res.message || 'Payment confirmed! Funds are safely secured in Campus Escrow.',
+          })
+          loadDeals()
+        })
+        .catch((err) => {
+          setPaymentFeedback({
+            type: 'error',
+            message: err.message || 'Could not verify Paystack payment.',
+          })
+        })
+        .finally(() => {
+          // Remove query params cleanly
+          const newParams = new URLSearchParams(searchParams)
+          newParams.delete('reference')
+          newParams.delete('payment')
+          newParams.delete('status')
+          setSearchParams(newParams, { replace: true })
+        })
+    }
+  }, [searchParams, isAuthenticated])
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -165,6 +204,33 @@ export default function MyDealsPage() {
         </div>
       </div>
 
+      {/* Paystack Payment Feedback Alert */}
+      {paymentFeedback && (
+        <div
+          className={`mb-6 p-4 rounded-2xl flex items-center justify-between text-sm ${
+            paymentFeedback.type === 'success'
+              ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/50'
+              : 'bg-red-50 dark:bg-red-950/40 text-red-800 dark:text-red-300 border border-red-200 dark:border-red-800/50'
+          }`}
+        >
+          <div className="flex items-center gap-2">
+            {paymentFeedback.type === 'success' ? (
+              <ShieldCheck className="w-5 h-5 text-emerald-600 shrink-0" />
+            ) : (
+              <AlertCircle className="w-5 h-5 text-red-600 shrink-0" />
+            )}
+            <span className="font-semibold">{paymentFeedback.message}</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setPaymentFeedback(null)}
+            className="text-xs font-bold opacity-60 hover:opacity-100"
+          >
+            Dismiss
+          </button>
+        </div>
+      )}
+
       {/* Deals List */}
       {isLoading ? (
         <div className="py-16 text-center text-slate-400 text-sm">
@@ -193,6 +259,7 @@ export default function MyDealsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {deals.map((deal) => {
             const isProposer = deal.proposer_id === user?.id
+            const isBuyer = (deal as any).conversation ? (deal as any).conversation.buyer_id === user?.id : !isProposer
             const isCompleted = deal.status === 'completed'
             const isAccepted = deal.status === 'accepted'
             const isProposed = deal.status === 'proposed'
@@ -212,7 +279,7 @@ export default function MyDealsPage() {
                           : isAccepted
                           ? 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'
                           : isProposed
-                          ? 'bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300'
+                          ? 'bg-red-50 text-red-700 border border-red-200 dark:bg-red-950/40 dark:text-red-300 dark:border-red-800/40'
                           : 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300'
                       }`}
                     >
@@ -267,6 +334,34 @@ export default function MyDealsPage() {
                     </div>
                   </div>
                 </div>
+
+                {/* Escrow Status & Paystack Deposit Button */}
+                {deal.deal_type !== 'exchange' && (Number(deal.agreed_price || deal.listing?.price || 0) > 0) && (
+                  <div className="mb-2">
+                    {deal.payment_status === 'paid' ? (
+                      <div className="p-2.5 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/40 rounded-xl flex items-center justify-between text-xs text-emerald-800 dark:text-emerald-300">
+                        <span className="flex items-center gap-1.5 font-bold">
+                          <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                          <span>Campus Escrow Secured (Paystack)</span>
+                        </span>
+                        <span className="text-[10px] font-mono opacity-80">
+                          {deal.payment_reference ? deal.payment_reference.slice(0, 16) + '…' : 'Paid'}
+                        </span>
+                      </div>
+                    ) : (
+                      isAccepted && isBuyer && (
+                        <button
+                          type="button"
+                          onClick={() => setSelectedPaystackDeal(deal)}
+                          className="w-full mb-1 py-2 px-3 bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-700 hover:to-rose-800 text-white text-xs font-bold rounded-xl shadow-xs transition flex items-center justify-center gap-1.5 cursor-pointer"
+                        >
+                          <Lock className="w-3.5 h-3.5" />
+                          <span>Pay ₦{Number(deal.agreed_price || deal.listing?.price || 0).toLocaleString()} with Paystack (Escrow)</span>
+                        </button>
+                      )
+                    )}
+                  </div>
+                )}
 
                 {/* Bottom Action Buttons */}
                 <div className="pt-2">
@@ -411,6 +506,13 @@ export default function MyDealsPage() {
             </form>
           </div>
         </div>
+      )}
+      {/* Paystack Escrow Checkout Modal */}
+      {selectedPaystackDeal && (
+        <PaystackPaymentModal
+          deal={selectedPaystackDeal}
+          onClose={() => setSelectedPaystackDeal(null)}
+        />
       )}
     </div>
   )

@@ -7,6 +7,7 @@ import type {
   Message,
   Review,
   AuthUser,
+  Payment,
 } from '../types'
 
 export const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api'
@@ -244,6 +245,53 @@ export async function confirmDealHandover(dealId: number | string): Promise<Deal
     method: 'PATCH',
   })
   return data.data
+}
+
+// =================== Paystack Payments & Campus Escrow ===================
+export interface InitializePaymentPayload {
+  deal_id?: number | string
+  listing_id?: number | string
+  amount?: number
+  callback_url?: string
+}
+
+export interface InitializePaymentResponse {
+  status: string
+  message: string
+  authorization_url?: string | null
+  access_code?: string | null
+  reference: string
+  public_key?: string
+  amount: number
+  is_simulated?: boolean
+  payment: Payment
+}
+
+export interface VerifyPaymentResponse {
+  status: string
+  message: string
+  payment: Payment
+  deal?: Deal | null
+}
+
+export async function initializePayment(payload: InitializePaymentPayload): Promise<InitializePaymentResponse> {
+  return request<InitializePaymentResponse>('/payments/initialize', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  })
+}
+
+export async function verifyPayment(reference: string): Promise<VerifyPaymentResponse> {
+  return request<VerifyPaymentResponse>(`/payments/verify/${encodeURIComponent(reference)}`)
+}
+
+export async function getPayments(page = 1): Promise<{ data: Payment[]; meta?: any }> {
+  return request<{ data: Payment[]; meta?: any }>(`/payments?page=${page}`)
+}
+
+export async function getPayment(id: number | string): Promise<{ data: Payment }> {
+  return request<{ data: Payment }>(`/payments/${id}`)
 }
 
 // =================== Reviews (Sprint 3) ===================

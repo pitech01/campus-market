@@ -11,7 +11,7 @@ export default function TrustSection() {
 
       <div className="trust-grid">
         <div className="trust-card">
-          <div className="trust-icon-box bg-blue">
+          <div className="trust-icon-box bg-red">
             <Icon name="icon-shield" />
           </div>
           <h3>Verified Student IDs</h3>
@@ -41,7 +41,7 @@ export default function TrustSection() {
         </div>
 
         <div className="trust-card">
-          <div className="trust-icon-box bg-purple">
+          <div className="trust-icon-box bg-crimson">
             <Icon name="icon-sparkles" />
           </div>
           <h3>Sustainable Student Circularity</h3>

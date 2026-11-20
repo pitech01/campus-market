@@ -15,12 +15,14 @@ import {
   Sparkles,
   Heart,
   Edit,
+  Lock,
 } from 'lucide-react'
 import { getListing, toggleFavorite } from '../lib/api'
 import { getListingById } from '../lib/listings'
 import { useAuth } from '../lib/authContext'
 import ChatDrawer from '../components/chat/ChatDrawer'
 import ReportModal from '../components/ReportModal'
+import PaystackPaymentModal from '../components/PaystackPaymentModal'
 import type { Listing } from '../types'
 
 export default function ListingDetailPage() {
@@ -33,6 +35,7 @@ export default function ListingDetailPage() {
   const [isFavorited, setIsFavorited] = useState(false)
   const [chatDrawerOpen, setChatDrawerOpen] = useState(false)
   const [reportModalOpen, setReportModalOpen] = useState(false)
+  const [paystackModalOpen, setPaystackModalOpen] = useState(false)
   const [notification, setNotification] = useState<string | null>(null)
 
   useEffect(() => {
@@ -212,7 +215,7 @@ export default function ListingDetailPage() {
           <div className="detail-specs-grid">
             <div className="spec-card">
               <span className="spec-label">Condition</span>
-              <strong className="spec-value text-blue">{listing.condition || 'Good Condition'}</strong>
+              <strong className="spec-value text-primary">{listing.condition || 'Good Condition'}</strong>
             </div>
             <div className="spec-card">
               <span className="spec-label">Campus Location</span>
@@ -255,12 +258,22 @@ export default function ListingDetailPage() {
               <>
                 <button
                   type="button"
-                  className="btn btn-accent-blue btn-lg inline-flex items-center gap-2"
+                  className="btn btn-primary btn-lg inline-flex items-center gap-2"
                   disabled={listing.status === 'sold'}
                   onClick={() => setChatDrawerOpen(true)}
                 >
                   <MessageSquare className="w-4 h-4" />
                   <span>Chat & Make Offer</span>
+                </button>
+
+                <button
+                  type="button"
+                  className="btn btn-outline btn-lg inline-flex items-center gap-2"
+                  disabled={listing.status === 'sold'}
+                  onClick={() => setPaystackModalOpen(true)}
+                >
+                  <Lock className="w-4 h-4 text-red-600" />
+                  <span>Pay with Paystack (Escrow)</span>
                 </button>
 
                 <button
@@ -343,6 +356,14 @@ export default function ListingDetailPage() {
         onClose={() => setChatDrawerOpen(false)}
         initialListing={listing}
       />
+
+      {/* Paystack Escrow Payment Modal */}
+      {paystackModalOpen && (
+        <PaystackPaymentModal
+          listing={listing}
+          onClose={() => setPaystackModalOpen(false)}
+        />
+      )}
     </div>
   )
 }

@@ -12,6 +12,7 @@ import {
   Sparkles,
   Camera,
   Check,
+  Lock,
 } from 'lucide-react'
 import type {
   Conversation,
@@ -34,6 +35,7 @@ import {
   blockUser,
 } from '../../lib/api'
 import { useAuth } from '../../lib/authContext'
+import PaystackPaymentModal from '../PaystackPaymentModal'
 
 interface ChatDrawerProps {
   isOpen: boolean
@@ -74,6 +76,7 @@ export default function ChatDrawer({
   const [reviewComment, setReviewComment] = useState('')
   const [isSubmittingReview, setIsSubmittingReview] = useState(false)
   const [reviewedDealId, setReviewedDealId] = useState<number | null>(null)
+  const [paystackModalDeal, setPaystackModalDeal] = useState<Deal | null>(null)
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -381,8 +384,8 @@ export default function ChatDrawer({
                           {otherUser?.name}
                         </span>
                         {otherUser?.campus_verified && (
-                          <span className="bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 text-[10px] font-medium px-1.5 py-0.2 rounded inline-flex items-center gap-1">
-                            <CheckCircle2 className="w-3 h-3 text-blue-600 dark:text-blue-400" />
+                          <span className="bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-900/60 text-[10px] font-semibold px-1.5 py-0.5 rounded inline-flex items-center gap-1">
+                            <CheckCircle2 className="w-3 h-3 text-red-600 dark:text-red-400" />
                             <span>LUC Verified</span>
                           </span>
                         )}
@@ -475,6 +478,34 @@ export default function ChatDrawer({
                       <MapPin className="w-3 h-3 text-slate-400" />
                       <span>Meetup: {activeDeal.meeting_location?.name || 'On-Campus Public Area'}</span>
                     </p>
+
+                    {/* Escrow Status / Paystack Trigger */}
+                    {activeDeal.deal_type !== 'exchange' && (Number(activeDeal.agreed_price || listing?.price || 0) > 0) && (
+                      <div className="mb-2">
+                        {activeDeal.payment_status === 'paid' ? (
+                          <div className="py-1 px-2 rounded-lg bg-emerald-100/70 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-800 text-[11px] font-bold text-emerald-800 dark:text-emerald-200 flex items-center justify-between">
+                            <span className="flex items-center gap-1">
+                              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                              <span>Escrow Secured (Paid via Paystack)</span>
+                            </span>
+                            <span className="font-mono text-[9.5px] opacity-75">
+                              {activeDeal.payment_reference ? activeDeal.payment_reference.slice(0, 12) + '…' : 'Paid'}
+                            </span>
+                          </div>
+                        ) : (
+                          activeDeal.status === 'accepted' && (activeConversation?.buyer_id === user?.id) && (
+                            <button
+                              type="button"
+                              onClick={() => setPaystackModalDeal(activeDeal)}
+                              className="w-full py-1.5 px-2 bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-700 hover:to-rose-800 text-white rounded-lg text-xs font-bold shadow-xs transition flex items-center justify-center gap-1.5 cursor-pointer"
+                            >
+                              <Lock className="w-3 h-3" />
+                              <span>Pay ₦{Number(activeDeal.agreed_price || listing?.price || 0).toLocaleString()} with Paystack (Escrow)</span>
+                            </button>
+                          )
+                        )}
+                      </div>
+                    )}
 
                     {/* Deal Action Buttons */}
                     <div className="flex items-center gap-2">
@@ -826,6 +857,13 @@ export default function ChatDrawer({
             </form>
           </div>
         </div>
+      )}
+      {/* Paystack Escrow Payment Modal */}
+      {paystackModalDeal && (
+        <PaystackPaymentModal
+          deal={paystackModalDeal}
+          onClose={() => setPaystackModalDeal(null)}
+        />
       )}
     </div>
   )

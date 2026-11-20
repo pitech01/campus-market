@@ -154,21 +154,21 @@ export default function Hero({ query, onQueryChange, onTrendingClick }: HeroProp
 
       <div className="hero-stats-row">
         <div className="hero-stat-card">
-          <Icon name="icon-shield" className="hero-stat-icon text-blue" />
+          <Icon name="icon-shield" className="hero-stat-icon text-primary" />
           <div className="hero-stat-text">
             <strong>Verified Students</strong>
             <span>LUC Student ID check</span>
           </div>
         </div>
         <div className="hero-stat-card">
-          <Icon name="icon-tag" className="hero-stat-icon text-blue" />
+          <Icon name="icon-tag" className="hero-stat-icon text-primary" />
           <div className="hero-stat-text">
             <strong>0% Platform Commission</strong>
             <span>Direct peer-to-peer deals</span>
           </div>
         </div>
         <div className="hero-stat-card">
-          <Icon name="icon-map-pin" className="hero-stat-icon text-blue" />
+          <Icon name="icon-map-pin" className="hero-stat-icon text-primary" />
           <div className="hero-stat-text">
             <strong>Hostel &amp; Library Meetups</strong>
             <span>Safe campus handovers</span>

@@ -112,6 +112,9 @@ export interface Deal {
   exchange_item?: string | null
   meet_at?: string | null
   status: 'proposed' | 'accepted' | 'declined' | 'cancelled' | 'completed'
+  payment_status?: 'unpaid' | 'pending' | 'paid' | 'refunded'
+  payment_reference?: string | null
+  paid_at?: string | null
   buyer_confirmed_at?: string | null
   seller_confirmed_at?: string | null
   created_at: string
@@ -119,6 +122,24 @@ export interface Deal {
   listing?: Listing
   proposer?: AuthUser
   reviews?: Review[]
+  payments?: Payment[]
+}
+
+export interface Payment {
+  id: number
+  user_id: number
+  deal_id?: number | null
+  listing_id?: number | null
+  reference: string
+  amount: number
+  currency: string
+  status: 'pending' | 'successful' | 'failed' | 'abandoned'
+  channel?: string | null
+  paid_at?: string | null
+  created_at: string
+  user?: AuthUser
+  deal?: Deal
+  listing?: Listing
 }
 
 export interface Review {

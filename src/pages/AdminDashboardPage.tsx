@@ -258,17 +258,17 @@ export const AdminDashboardPage: React.FC = () => {
           <div className="login-inspo-brand">
             <div className="flex items-center gap-3">
               <Link to="/" className="brand-logo-link">
-                <svg className="brand-cube-icon" style={{ color: '#4f46e5' }} viewBox="0 0 24 24" fill="currentColor">
+                <svg className="brand-cube-icon" style={{ color: '#dc2626' }} viewBox="0 0 24 24" fill="currentColor">
                   <rect x="3" y="3" width="7.5" height="7.5" rx="1.5" />
                   <rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5" />
                   <rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5" />
                   <rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5" />
                 </svg>
                 <span className="brand-title">
-                  CampusMarket <span style={{ color: '#4f46e5', fontWeight: 600, fontSize: 14 }}>Admin</span>
+                  CampusMarket <span style={{ color: '#dc2626', fontWeight: 600, fontSize: 14 }}>Admin</span>
                 </span>
               </Link>
-              <span className="brand-sub-badge" style={{ background: 'rgba(79, 70, 229, 0.1)', color: '#4f46e5' }}>
+              <span className="brand-sub-badge" style={{ background: 'rgba(220, 38, 38, 0.1)', color: '#dc2626' }}>
                 Staff Gateway
               </span>
             </div>
@@ -296,7 +296,7 @@ export const AdminDashboardPage: React.FC = () => {
             <div className="admin-quick-card">
               <div className="admin-quick-header">
                 <span className="admin-quick-tag flex items-center gap-1">
-                  <Zap className="w-3.5 h-3.5 text-indigo-600" />
+                  <Zap className="w-3.5 h-3.5 text-red-600" />
                   <span>1-Click Fast Verification</span>
                 </span>
                 <span className="admin-quick-role">Author / Admin</span>
@@ -310,7 +310,7 @@ export const AdminDashboardPage: React.FC = () => {
                 onClick={handleAdminQuickLogin}
                 disabled={isLoggingIn}
                 className="inspo-btn-submit flex items-center justify-center gap-2"
-                style={{ background: 'linear-gradient(135deg, #4f46e5 0%, #4338ca 100%)', boxShadow: '0 4px 14px rgba(79, 70, 229, 0.35)', marginTop: 8 }}
+                style={{ background: 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)', boxShadow: '0 4px 14px rgba(220, 38, 38, 0.35)', marginTop: 8 }}
               >
                 <Zap className="w-4 h-4" />
                 <span>{isLoggingIn ? 'Authenticating…' : 'Unlock Admin Dashboard (Nusaiba)'}</span>
@@ -370,7 +370,7 @@ export const AdminDashboardPage: React.FC = () => {
         </div>
 
         {/* Right Illustration Panel */}
-        <div className="login-inspo-right" style={{ background: 'linear-gradient(135deg, #4338ca 0%, #1e1b4b 100%)' }}>
+        <div className="login-inspo-right" style={{ background: 'linear-gradient(135deg, #b91c1c 0%, #881337 50%, #4c0519 100%)' }}>
           <div className="inspo-illustration-wrapper">
             <div className="inspo-art-card" style={{ borderColor: 'rgba(255, 255, 255, 0.22)' }}>
               <img
@@ -454,7 +454,7 @@ export const AdminDashboardPage: React.FC = () => {
         <div className="admin-tab-bar">
           <button
             onClick={() => setActiveTab('overview')}
-            className={`admin-tab-btn ${activeTab === 'overview' ? 'is-active is-indigo' : ''}`}
+            className={`admin-tab-btn ${activeTab === 'overview' ? 'is-active is-red' : ''}`}
           >
             <BarChart3 className="w-4 h-4" />
             <span>Analytics & KPI</span>
@@ -503,7 +503,7 @@ export const AdminDashboardPage: React.FC = () => {
             <div className="admin-stats-grid">
               <div className="admin-stat-card">
                 <span className="admin-stat-icon">
-                  <GraduationCap className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+                  <GraduationCap className="w-6 h-6 text-red-600 dark:text-red-400" />
                 </span>
                 <span className="admin-stat-label">Total Students</span>
                 <span className="admin-stat-val">{stats.metrics.total_users}</span>
@@ -521,7 +521,7 @@ export const AdminDashboardPage: React.FC = () => {
 
               <div className="admin-stat-card">
                 <span className="admin-stat-icon">
-                  <Handshake className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                  <Handshake className="w-6 h-6 text-rose-600 dark:text-rose-400" />
                 </span>
                 <span className="admin-stat-label">Exchanges & Deals</span>
                 <span className="admin-stat-val">{stats.metrics.total_deals}</span>
@@ -530,7 +530,7 @@ export const AdminDashboardPage: React.FC = () => {
 
               <div className="admin-stat-card">
                 <span className="admin-stat-icon">
-                  <ShieldCheck className="w-6 h-6 text-rose-600 dark:text-rose-400" />
+                  <ShieldCheck className="w-6 h-6 text-red-600 dark:text-red-400" />
                 </span>
                 <span className="admin-stat-label">Open Reports</span>
                 <span className="admin-stat-val red">{stats.metrics.open_reports}</span>
@@ -542,7 +542,7 @@ export const AdminDashboardPage: React.FC = () => {
             <div className="admin-box">
               <div className="admin-box-header">
                 <h3 className="admin-box-title flex items-center gap-2">
-                  <Tag className="w-4 h-4 text-indigo-600" />
+                  <Tag className="w-4 h-4 text-red-600" />
                   <span>Active Marketplace Inventory by Category</span>
                 </h3>
                 <span className="admin-box-sub">Current distribution of goods and services listed by LUC students</span>
@@ -562,7 +562,7 @@ export const AdminDashboardPage: React.FC = () => {
             <div className="admin-box">
               <div className="admin-box-header">
                 <h3 className="admin-box-title flex items-center gap-2">
-                  <FileText className="w-4 h-4 text-indigo-600" />
+                  <FileText className="w-4 h-4 text-red-600" />
                   <span>Recent Platform Audit Trail (FR-MOD-05)</span>
                 </h3>
                 <span className="admin-box-sub">Real-time audit log of moderator actions, administrative changes, and policy events</span>
@@ -872,7 +872,7 @@ export const AdminDashboardPage: React.FC = () => {
             <div className="admin-box">
               <div className="admin-box-header">
                 <h3 className="admin-box-title flex items-center gap-2">
-                  <Tag className="w-4 h-4 text-indigo-600" />
+                  <Tag className="w-4 h-4 text-red-600" />
                   <span>Add Marketplace Category</span>
                 </h3>
                 <span className="admin-box-sub">Expand campus trade offerings</span>
@@ -909,7 +909,7 @@ export const AdminDashboardPage: React.FC = () => {
             <div className="admin-box">
               <div className="admin-box-header">
                 <h3 className="admin-box-title flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-indigo-600" />
+                  <MapPin className="w-4 h-4 text-red-600" />
                   <span>Add Official Meeting Location</span>
                 </h3>
                 <span className="admin-box-sub">Safe monitored campus pickup spots</span>
@@ -936,7 +936,7 @@ export const AdminDashboardPage: React.FC = () => {
                     className="admin-input"
                   />
                 </div>
-                <button type="submit" className="btn btn-accent-blue flex items-center justify-center gap-1.5" style={{ marginTop: 4 }}>
+                <button type="submit" className="btn btn-primary flex items-center justify-center gap-1.5" style={{ marginTop: 4 }}>
                   <Plus className="w-4 h-4" />
                   <span>Add Meeting Spot</span>
                 </button>
@@ -950,7 +950,7 @@ export const AdminDashboardPage: React.FC = () => {
           <div className="admin-box">
             <div className="admin-box-header">
               <h3 className="admin-box-title flex items-center gap-2">
-                <Settings className="w-4 h-4 text-indigo-600" />
+                <Settings className="w-4 h-4 text-red-600" />
                 <span>Campus Policies & Prohibited Item Filter (FR-ADM-04)</span>
               </h3>
               <span className="admin-box-sub">Configure student email verification domains and automated prohibited goods filters</span>
