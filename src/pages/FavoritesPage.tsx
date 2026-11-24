@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Heart, Package, MapPin, ArrowRight } from 'lucide-react'
 import type { Listing } from '../types'
-import { getFavorites, toggleFavorite } from '../lib/api'
+import { getFavorites, toggleFavorite, resolveImageUrl, DEFAULT_ITEM_PLACEHOLDER } from '../lib/api'
 import { useAuth } from '../lib/authContext'
 
 export default function FavoritesPage() {
@@ -103,9 +103,10 @@ export default function FavoritesPage() {
           {favorites.map((listing) => {
             const isSold = listing.status === 'sold'
             const isReserved = listing.status === 'reserved'
-            const imgUrl = Array.isArray(listing.images) && listing.images.length > 0
+            const rawImg = Array.isArray(listing.images) && listing.images.length > 0
               ? (typeof listing.images[0] === 'string' ? listing.images[0] : (listing.images[0] as any).url)
               : null
+            const imgUrl = rawImg ? resolveImageUrl(rawImg) : null
 
             return (
               <div
@@ -121,6 +122,9 @@ export default function FavoritesPage() {
                       className={`w-full h-full object-cover group-hover:scale-105 transition duration-300 ${
                         isSold ? 'grayscale opacity-75' : ''
                       }`}
+                      onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).src = DEFAULT_ITEM_PLACEHOLDER
+                      }}
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-slate-400">

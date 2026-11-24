@@ -13,6 +13,56 @@ import type {
 export const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api'
 export const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000'
 
+export const DEFAULT_ITEM_PLACEHOLDER =
+  'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=800&auto=format&fit=crop&q=80'
+
+/**
+ * Universal Image URL Resolver
+ * Resolves images whether returned as:
+ * 1. External CDN URLs (Unsplash, Wikimedia)
+ * 2. Uploaded paths with hardcoded localhost/127.0.0.1:8000
+ * 3. Relative storage paths ("listings/xyz.jpg" or "/storage/listings/xyz.jpg")
+ * 4. Blob / data URIs
+ */
+export function resolveImageUrl(
+  url?: string | null,
+  fallback: string = DEFAULT_ITEM_PLACEHOLDER
+): string {
+  if (!url || typeof url !== 'string' || !url.trim()) {
+    return fallback
+  }
+
+  const trimmed = url.trim()
+
+  // Base64 or object blob URLs returned as-is
+  if (trimmed.startsWith('data:') || trimmed.startsWith('blob:')) {
+    return trimmed
+  }
+
+  // If URL has hardcoded localhost:8000 or 127.0.0.1:8000 from local backend APP_URL,
+  // strip it out and convert to a relative path so it routes through Vite proxy or production host
+  if (/^https?:\/\/(localhost|127\.0\.0\.1):8000/i.test(trimmed)) {
+    const rel = trimmed.replace(/^https?:\/\/(localhost|127\.0\.0\.1):8000/i, '')
+    return rel.startsWith('/') ? rel : `/${rel}`
+  }
+
+  // External CDN or production HTTPS URLs
+  if (/^https?:\/\//i.test(trimmed)) {
+    return trimmed
+  }
+
+  // Relative paths
+  if (trimmed.startsWith('/')) {
+    return trimmed
+  }
+
+  if (trimmed.startsWith('storage/')) {
+    return `/${trimmed}`
+  }
+
+  return `/storage/${trimmed}`
+}
+
 function getAuthHeader(): Record<string, string> {
   const token = localStorage.getItem('nussy_auth_token')
   return token ? { Authorization: `Bearer ${token}` } : {}

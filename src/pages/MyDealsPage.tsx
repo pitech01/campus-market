@@ -22,6 +22,8 @@ import {
   confirmDealHandover,
   submitReview,
   verifyPayment,
+  resolveImageUrl,
+  DEFAULT_ITEM_PLACEHOLDER,
 } from '../lib/api'
 import { useAuth } from '../lib/authContext'
 import PaystackPaymentModal from '../components/PaystackPaymentModal'
@@ -295,13 +297,16 @@ export default function MyDealsPage() {
                     <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-700 overflow-hidden flex-shrink-0 flex items-center justify-center">
                       {deal.listing?.images && (deal.listing.images as any).length > 0 ? (
                         <img
-                          src={
+                          src={resolveImageUrl(
                             typeof (deal.listing.images as any)[0] === 'string'
                               ? (deal.listing.images as any)[0]
                               : (deal.listing.images as any)[0].url
-                          }
+                          )}
                           alt=""
                           className="w-full h-full object-cover"
+                          onError={(e) => {
+                            (e.currentTarget as HTMLImageElement).src = DEFAULT_ITEM_PLACEHOLDER
+                          }}
                         />
                       ) : (
                         <Package className="w-6 h-6 text-slate-400" />

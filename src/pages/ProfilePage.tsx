@@ -24,6 +24,8 @@ import {
   deleteListing,
   getFavorites,
   updateProfile,
+  resolveImageUrl,
+  DEFAULT_ITEM_PLACEHOLDER,
 } from '../lib/api'
 import type { Listing } from '../types'
 
@@ -161,9 +163,21 @@ export default function ProfilePage() {
       <div className="student-profile-hero">
         <div className="student-hero-content">
           <div className="student-avatar-large">
-            <div className="avatar-big-initial">
-              {studentName.charAt(0).toUpperCase()}
-            </div>
+            {user?.avatar_url ? (
+              <img
+                src={resolveImageUrl(user.avatar_url)}
+                alt={studentName}
+                className="student-avatar-img w-full h-full rounded-full object-cover"
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).style.display = 'none'
+                }}
+              />
+            ) : null}
+            {!user?.avatar_url && (
+              <div className="avatar-big-initial">
+                {studentName.charAt(0).toUpperCase()}
+              </div>
+            )}
             <span className="online-badge" />
           </div>
 
@@ -248,12 +262,13 @@ export default function ProfilePage() {
             <div className="profile-items-grid">
               {listings.map((listing) => {
                 const category = categoryMap[listing.category as any] || (listing.category as any)
-                const cover =
+                const rawCover =
                   Array.isArray(listing.images) && listing.images.length > 0
                     ? typeof listing.images[0] === 'string'
                       ? listing.images[0]
                       : (listing.images[0] as any).url
-                    : 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=800&auto=format&fit=crop&q=80'
+                    : null
+                const cover = resolveImageUrl(rawCover)
 
                 const isAvailable = listing.status === 'active' || listing.status === 'available'
 
@@ -263,7 +278,13 @@ export default function ProfilePage() {
                     key={listing.id}
                   >
                     <div className="profile-item-thumb">
-                      <img src={cover} alt={listing.title} />
+                      <img
+                        src={cover}
+                        alt={listing.title}
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).src = DEFAULT_ITEM_PLACEHOLDER
+                        }}
+                      />
                       <span className={`status-pill ${isAvailable ? 'status-available' : 'status-sold'}`}>
                         {isAvailable ? 'Available' : listing.status.toUpperCase()}
                       </span>

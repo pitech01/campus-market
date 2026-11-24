@@ -36,6 +36,8 @@ import {
   submitReview,
   getMeetingLocations,
   blockUser,
+  resolveImageUrl,
+  DEFAULT_ITEM_PLACEHOLDER,
 } from '../../lib/api'
 import { useAuth } from '../../lib/authContext'
 import PaystackPaymentModal from '../PaystackPaymentModal'
@@ -426,7 +428,12 @@ export default function ChatDrawer({
                     >
                       <div className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 flex-shrink-0 flex items-center justify-center text-sm font-bold text-slate-700 dark:text-slate-300 overflow-hidden">
                         {conv.other_user?.avatar_url ? (
-                          <img src={conv.other_user.avatar_url} alt="" className="w-full h-full object-cover" />
+                          <img
+                            src={resolveImageUrl(conv.other_user.avatar_url)}
+                            alt=""
+                            className="w-full h-full object-cover"
+                            onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
+                          />
                         ) : (
                           conv.other_user?.name?.charAt(0) || 'U'
                         )}
@@ -460,9 +467,14 @@ export default function ChatDrawer({
                 {/* Chat Partner Header */}
                 <div className="p-3 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center font-bold text-xs">
+                    <div className="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center font-bold text-xs overflow-hidden">
                       {otherUser?.avatar_url ? (
-                        <img src={otherUser.avatar_url} alt="" className="w-full h-full rounded-full object-cover" />
+                        <img
+                          src={resolveImageUrl(otherUser.avatar_url)}
+                          alt=""
+                          className="w-full h-full rounded-full object-cover"
+                          onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
+                        />
                       ) : (
                         otherUser?.name?.charAt(0) || 'U'
                       )}
@@ -550,9 +562,12 @@ export default function ChatDrawer({
                       <div className="w-10 h-10 rounded bg-slate-200 dark:bg-slate-700 overflow-hidden flex-shrink-0 flex items-center justify-center">
                         {Array.isArray(listing.images) && listing.images.length > 0 ? (
                           <img
-                            src={typeof listing.images[0] === 'string' ? listing.images[0] : (listing.images[0] as any).url}
+                            src={resolveImageUrl(
+                              typeof listing.images[0] === 'string' ? listing.images[0] : (listing.images[0] as any).url
+                            )}
                             alt=""
                             className="w-full h-full object-cover"
+                            onError={(e) => { (e.currentTarget as HTMLImageElement).src = DEFAULT_ITEM_PLACEHOLDER }}
                           />
                         ) : (
                           <Package className="w-5 h-5 text-slate-400" />
@@ -735,7 +750,12 @@ export default function ChatDrawer({
                           >
                             {msg.image_url && (
                               <div className="mb-1.5 rounded-lg overflow-hidden max-h-48">
-                                <img src={msg.image_url} alt="" className="w-full h-full object-cover" />
+                                <img
+                                  src={resolveImageUrl(msg.image_url)}
+                                  alt=""
+                                  className="w-full h-full object-cover"
+                                  onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
+                                />
                               </div>
                             )}
                             <p className="leading-relaxed whitespace-pre-wrap">{msg.content}</p>

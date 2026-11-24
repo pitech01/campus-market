@@ -20,6 +20,7 @@ import {
 import Icon from './Icon'
 import { useFavorites } from '../lib/favoritesContext'
 import { useAuth } from '../lib/authContext'
+import { resolveImageUrl } from '../lib/api'
 import ChatDrawer from './chat/ChatDrawer'
 import NotificationDropdown from './NotificationDropdown'
 
@@ -215,7 +216,16 @@ export default function Navbar() {
             {/* User Profile Pill (Desktop / Tablet) */}
             {isAuthenticated ? (
               <Link to="/profile" className="user-profile-pill desktop-only-btn" aria-label="Your Account">
-                <span className="user-nav-initial">{userInitial}</span>
+                {user?.avatar_url ? (
+                  <img
+                    src={resolveImageUrl(user.avatar_url)}
+                    alt=""
+                    className="w-5 h-5 rounded-full object-cover flex-shrink-0"
+                    onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
+                  />
+                ) : (
+                  <span className="user-nav-initial">{userInitial}</span>
+                )}
                 <span className="user-nav-label">{displayName}</span>
               </Link>
             ) : (
@@ -275,8 +285,17 @@ export default function Navbar() {
             <div className="mobile-drawer-user-card">
               {isAuthenticated ? (
                 <div className="mobile-user-profile">
-                  <div className="mobile-user-avatar">
-                    <span>{userInitial}</span>
+                  <div className="mobile-user-avatar overflow-hidden">
+                    {user?.avatar_url ? (
+                      <img
+                        src={resolveImageUrl(user.avatar_url)}
+                        alt=""
+                        className="w-full h-full rounded-full object-cover"
+                        onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
+                      />
+                    ) : (
+                      <span>{userInitial}</span>
+                    )}
                   </div>
                   <div className="mobile-user-details">
                     <div className="mobile-user-name">{user?.name}</div>

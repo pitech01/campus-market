@@ -14,6 +14,7 @@ import {
   getListing,
   getCategories,
   getMeetingLocations,
+  resolveImageUrl,
 } from '../lib/api'
 import { useAuth } from '../lib/authContext'
 import type { Category, MeetingLocation, ItemCondition, ListingType } from '../types'
@@ -79,7 +80,7 @@ export default function ListingFormPage() {
           })
           if (Array.isArray(data.images) && data.images.length > 0) {
             setPreviewUrls(
-              data.images.map((img: any) => (typeof img === 'string' ? img : img.url))
+              data.images.map((img: any) => resolveImageUrl(typeof img === 'string' ? img : img.url))
             )
           }
         })

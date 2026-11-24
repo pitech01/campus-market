@@ -3,6 +3,7 @@ import { categories } from '../data/categories'
 import type { Listing } from '../types'
 import Icon from './Icon'
 import { useFavorites } from '../lib/favoritesContext'
+import { resolveImageUrl, DEFAULT_ITEM_PLACEHOLDER } from '../lib/api'
 
 const categoryMap = Object.fromEntries(categories.map((c) => [c.id, c]))
 
@@ -24,15 +25,13 @@ export default function ListingCard({ listing }: { listing: Listing }) {
 
   const rawImages = listing.images && listing.images.length > 0 ? listing.images : []
   const firstImage = rawImages[0]
-  const coverImage =
-    typeof firstImage === 'string'
-      ? firstImage
-      : (firstImage as any)?.url ||
-        'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=800&auto=format&fit=crop&q=80'
+  const rawCover = typeof firstImage === 'string' ? firstImage : (firstImage as any)?.url
+  const coverImage = resolveImageUrl(rawCover)
 
   const sellerName = (listing as any).seller?.name || listing.sellerName || 'Student'
   const sellerInitial = (listing as any).seller?.name?.charAt(0) || listing.sellerInitial || 'S'
-  const sellerAvatar = (listing as any).seller?.avatar_url || listing.sellerAvatar
+  const rawSellerAvatar = (listing as any).seller?.avatar_url || listing.sellerAvatar
+  const sellerAvatar = rawSellerAvatar ? resolveImageUrl(rawSellerAvatar, '') : null
   const locationText = listing.meeting_location?.name || listing.location || 'NSUK Campus, Keffi'
 
   return (
@@ -44,6 +43,9 @@ export default function ListingCard({ listing }: { listing: Listing }) {
             alt={listing.title}
             loading="lazy"
             className="listing-card-img"
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).src = DEFAULT_ITEM_PLACEHOLDER
+            }}
           />
         </Link>
 
@@ -111,6 +113,9 @@ export default function ListingCard({ listing }: { listing: Listing }) {
                 src={sellerAvatar}
                 alt={sellerName}
                 className="seller-avatar-img"
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).style.display = 'none'
+                }}
               />
             ) : (
               <span className="avatar-initial">{sellerInitial}</span>

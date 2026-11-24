@@ -17,7 +17,7 @@ import {
   Edit,
   Lock,
 } from 'lucide-react'
-import { getListing, toggleFavorite } from '../lib/api'
+import { getListing, toggleFavorite, resolveImageUrl, DEFAULT_ITEM_PLACEHOLDER } from '../lib/api'
 import { getListingById } from '../lib/listings'
 import { useAuth } from '../lib/authContext'
 import ChatDrawer from '../components/chat/ChatDrawer'
@@ -94,11 +94,11 @@ export default function ListingDetailPage() {
   }
 
   const rawImages = listing.images && (listing.images as any).length > 0 ? listing.images : []
-  const images: string[] = rawImages.map((img: any) =>
-    typeof img === 'string' ? img : img.url || ''
-  )
+  const images: string[] = rawImages
+    .map((img: any) => resolveImageUrl(typeof img === 'string' ? img : img.url || ''))
+    .filter(Boolean)
   if (images.length === 0) {
-    images.push('https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=800&auto=format&fit=crop&q=80')
+    images.push(DEFAULT_ITEM_PLACEHOLDER)
   }
 
   const isMine =
@@ -107,7 +107,8 @@ export default function ListingDetailPage() {
 
   const sellerName = (listing as any).seller?.name || listing.sellerName || 'NSUK Student'
   const sellerInitial = (listing as any).seller?.name?.charAt(0) || listing.sellerInitial || 'S'
-  const sellerAvatar = (listing as any).seller?.avatar_url || listing.sellerAvatar
+  const rawSellerAvatar = (listing as any).seller?.avatar_url || listing.sellerAvatar
+  const sellerAvatar = rawSellerAvatar ? resolveImageUrl(rawSellerAvatar, '') : null
   const sellerRating = (listing as any).seller?.average_rating || listing.sellerRating || 5.0
   const sellerReviews = (listing as any).seller?.reviews_count || listing.sellerReviewsCount || 0
   const meetingSpotName = listing.meeting_location?.name || listing.location || 'NSUK Central Library / Senate Building Foyer'
@@ -159,6 +160,9 @@ export default function ListingDetailPage() {
               src={images[activeImageIndex] || images[0]}
               alt={listing.title}
               className="gallery-main-image"
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).src = DEFAULT_ITEM_PLACEHOLDER
+              }}
             />
 
             <div className="gallery-floating-badges">
@@ -190,7 +194,13 @@ export default function ListingDetailPage() {
                   className={`gallery-thumb-btn ${idx === activeImageIndex ? 'is-active' : ''}`}
                   onClick={() => setActiveImageIndex(idx)}
                 >
-                  <img src={img} alt={`View ${idx + 1}`} />
+                  <img
+                    src={img}
+                    alt={`View ${idx + 1}`}
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).src = DEFAULT_ITEM_PLACEHOLDER
+                    }}
+                  />
                 </button>
               ))}
             </div>
@@ -320,7 +330,14 @@ export default function ListingDetailPage() {
           <div className="detail-seller-card">
             <div className="seller-card-header">
               {sellerAvatar ? (
-                <img src={sellerAvatar} alt={sellerName} className="seller-big-avatar" />
+                <img
+                  src={sellerAvatar}
+                  alt={sellerName}
+                  className="seller-big-avatar"
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).style.display = 'none'
+                  }}
+                />
               ) : (
                 <span className="avatar-initial large">{sellerInitial}</span>
               )}
