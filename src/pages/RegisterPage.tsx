@@ -70,10 +70,10 @@ export default function RegisterPage() {
         <div className="login-inspo-brand">
           <div className="flex items-center gap-2.5">
             <Link to="/" className="brand-logo-link flex items-center gap-2">
-              <img src="/images/nsuk-logo.png" alt="NSUK Crest" className="w-7 h-7 object-contain inline-block" />
+              <img src="/images/lincoln-nsuk-logo.png" alt="Lincoln NSUK Logo" className="w-7 h-7 object-contain inline-block" />
               <span className="brand-title">CampusMarket</span>
             </Link>
-            <span className="brand-sub-badge hidden sm:inline-flex">NSUK Verified</span>
+            <span className="brand-sub-badge hidden sm:inline-flex">Lincoln NSUK Verified</span>
           </div>
 
           <Link to="/" className="brand-back-btn" aria-label="Back to website">
@@ -210,7 +210,7 @@ export default function RegisterPage() {
                 id="reg-email"
                 type="email"
                 className="inspo-input"
-                placeholder="e.g. nusaiba@nsuk.edu.ng or student@gmail.com"
+                placeholder="e.g. nusaiba@lincoln.edu.ng or student@lincoln.edu.ng"
                 required
                 value={form.email}
                 onChange={updateField('email')}

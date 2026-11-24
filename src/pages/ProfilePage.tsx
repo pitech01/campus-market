@@ -138,7 +138,7 @@ export default function ProfilePage() {
 
   const studentName = user?.name || 'Nusaiba Nussy Abdullahi'
   const studentId = user?.student_id || 'NSUK/NAS/2023/1042'
-  const studentEmail = user?.email || 'nusaiba@nsuk.edu.ng'
+  const studentEmail = user?.email || 'nusaiba@lincoln.edu.ng'
 
   if (!isAuthenticated) {
     return (

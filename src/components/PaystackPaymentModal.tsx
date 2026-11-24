@@ -117,7 +117,7 @@ export default function PaystackPaymentModal({
 
         const handler = (window as any).PaystackPop.setup({
           key: publicKey,
-          email: user?.email || 'student@nsuk.edu.ng',
+          email: user?.email || 'student@lincoln.edu.ng',
           amount: amountInKobo,
           currency: activeListing?.currency === 'RM' ? 'MYR' : 'NGN',
           ref: reference,

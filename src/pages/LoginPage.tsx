@@ -45,10 +45,10 @@ export default function LoginPage() {
         <div className="login-inspo-brand">
           <div className="flex items-center gap-2.5">
             <Link to="/" className="brand-logo-link flex items-center gap-2">
-              <img src="/images/nsuk-logo.png" alt="NSUK Crest" className="w-7 h-7 object-contain inline-block" />
+              <img src="/images/lincoln-nsuk-logo.png" alt="Lincoln NSUK Logo" className="w-7 h-7 object-contain inline-block" />
               <span className="brand-title">CampusMarket</span>
             </Link>
-            <span className="brand-sub-badge hidden sm:inline-flex">NSUK Verified</span>
+            <span className="brand-sub-badge hidden sm:inline-flex">Lincoln NSUK Verified</span>
           </div>
 
           <Link to="/" className="brand-back-btn" aria-label="Back to website">
@@ -61,7 +61,7 @@ export default function LoginPage() {
         <div className="login-inspo-form-wrapper">
           <div className="login-inspo-header">
             <h1 className="login-inspo-title">Welcome back</h1>
-            <p className="login-inspo-subtitle">Please enter your NSUK student login details</p>
+            <p className="login-inspo-subtitle">Please enter your Lincoln NSUK student login details</p>
           </div>
 
           {errorMsg && (
@@ -80,7 +80,7 @@ export default function LoginPage() {
                 id="email"
                 type="email"
                 className="inspo-input"
-                placeholder="e.g. student@nsuk.edu.ng or your email"
+                placeholder="e.g. student@lincoln.edu.ng or your email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}

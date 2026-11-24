@@ -247,7 +247,7 @@ export const AdminDashboardPage: React.FC = () => {
           <div className="login-inspo-brand">
             <div className="flex items-center gap-3">
               <Link to="/" className="brand-logo-link flex items-center gap-2">
-                <img src="/images/nsuk-logo.png" alt="NSUK Crest" className="w-7 h-7 object-contain inline-block" />
+                <img src="/images/lincoln-nsuk-logo.png" alt="Lincoln NSUK Logo" className="w-7 h-7 object-contain inline-block" />
                 <span className="brand-title">
                   CampusMarket <span style={{ color: '#dc2626', fontWeight: 600, fontSize: 14 }}>Admin</span>
                 </span>
@@ -287,7 +287,7 @@ export const AdminDashboardPage: React.FC = () => {
                   required
                   value={loginEmail}
                   onChange={(e) => setLoginEmail(e.target.value)}
-                  placeholder="e.g. staff@nsuk.edu.ng or nusaiba@nsuk.edu.ng"
+                  placeholder="e.g. staff@lincoln.edu.ng or nusaiba@lincoln.edu.ng"
                   className="inspo-input"
                 />
               </div>
@@ -921,7 +921,7 @@ export const AdminDashboardPage: React.FC = () => {
                   className="admin-input mono"
                 />
                 <span style={{ fontSize: 11, color: 'var(--text-soft)' }}>
-                  Default: nsuk.edu.ng, student.nsuk.edu.ng
+                  Default: lincoln.edu.ng, nsuk.edu.ng, student.lincoln.edu.ng
                 </span>
               </div>
 

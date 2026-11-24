@@ -8,9 +8,9 @@ export default function Footer() {
       <div className="footer-inner">
         {/* Brand & Mission Column */}
         <div className="footer-brand-column">
-          <Link className="brand" to="/" aria-label="NSUK Campus Market Home">
+          <Link className="brand" to="/" aria-label="Lincoln NSUK Campus Market Home">
             <div className="brand-badge" style={{ background: '#ffffff', padding: 2, border: '1.5px solid rgba(220, 38, 38, 0.4)' }}>
-              <img src="/images/nsuk-logo.png" alt="NSUK Crest" style={{ width: 26, height: 26, objectFit: 'contain' }} />
+              <img src="/images/lincoln-nsuk-logo.png" alt="Lincoln NSUK Crest" style={{ width: 28, height: 28, objectFit: 'contain' }} />
             </div>
             <div className="brand-text-group">
               <span className="brand-name">Campus Market</span>

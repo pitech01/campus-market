@@ -112,9 +112,9 @@ export default function Navbar() {
       <header className="navbar">
         <div className="navbar-inner">
           {/* Brand Logo */}
-          <Link className="brand" to="/" aria-label="NSUK Campus Market Home">
+          <Link className="brand" to="/" aria-label="Lincoln NSUK Campus Market Home">
             <div className="brand-badge" style={{ background: '#ffffff', padding: 2, border: '1.5px solid rgba(220, 38, 38, 0.4)' }}>
-              <img src="/images/nsuk-logo.png" alt="NSUK Crest" style={{ width: 26, height: 26, objectFit: 'contain' }} />
+              <img src="/images/lincoln-nsuk-logo.png" alt="Lincoln NSUK Crest" style={{ width: 28, height: 28, objectFit: 'contain' }} />
             </div>
             <div className="brand-text-group">
               <span className="brand-name">Campus Market</span>
@@ -263,8 +263,8 @@ export default function Navbar() {
             {/* Drawer Header */}
             <div className="mobile-drawer-header">
               <Link to="/" className="brand" onClick={() => setMenuOpen(false)}>
-                <div className="brand-badge">
-                  <span className="brand-logo-text">NSUK</span>
+                <div className="brand-badge" style={{ background: '#ffffff', padding: 2, border: '1.5px solid rgba(220, 38, 38, 0.4)' }}>
+                  <img src="/images/lincoln-nsuk-logo.png" alt="Lincoln NSUK Crest" style={{ width: 26, height: 26, objectFit: 'contain' }} />
                 </div>
                 <div className="brand-text-group">
                   <span className="brand-name">Campus Market</span>
