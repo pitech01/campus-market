@@ -33,9 +33,7 @@ export default function ListingCard({ listing }: { listing: Listing }) {
   const sellerName = (listing as any).seller?.name || listing.sellerName || 'Student'
   const sellerInitial = (listing as any).seller?.name?.charAt(0) || listing.sellerInitial || 'S'
   const sellerAvatar = (listing as any).seller?.avatar_url || listing.sellerAvatar
-  const sellerRating = (listing as any).seller?.average_rating || listing.sellerRating || 5.0
-  const sellerReviews = (listing as any).seller?.reviews_count || listing.sellerReviewsCount || 0
-  const locationText = listing.meeting_location?.name || listing.location || 'Lincoln Campus'
+  const locationText = listing.meeting_location?.name || listing.location || 'NSUK Campus, Keffi'
 
   return (
     <article className={`listing-card ${listing.status === 'sold' ? 'is-sold' : ''}`}>
@@ -120,14 +118,6 @@ export default function ListingCard({ listing }: { listing: Listing }) {
             <div className="seller-details">
               <span className="seller-name-text">
                 {sellerName}
-                <span className="verified-badge-inline" title="LUC Verified Student">
-                  <Icon name="icon-check-circle" />
-                </span>
-              </span>
-              <span className="seller-rating-line">
-                <Icon name="icon-star" className="star-icon" />
-                <span>{Number(sellerRating).toFixed(1)}</span>
-                <span className="review-count">({sellerReviews})</span>
               </span>
             </div>
           </div>

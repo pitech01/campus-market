@@ -1,6 +1,6 @@
 import { useState, useEffect, type FormEvent } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { ArrowLeft, Zap, ShieldCheck, AlertCircle } from 'lucide-react'
+import { ArrowLeft, ShieldCheck, AlertCircle } from 'lucide-react'
 import { useAuth } from '../lib/authContext'
 
 export default function LoginPage() {
@@ -23,12 +23,6 @@ export default function LoginPage() {
     }
   }, [isAuthenticated, navigate, redirectUrl])
 
-  const handleFillDemo = () => {
-    setEmail('nusaiba@lincoln.edu.my')
-    setPassword('password')
-    setErrorMsg(null)
-  }
-
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault()
     setLoading(true)
@@ -50,16 +44,11 @@ export default function LoginPage() {
       <div className="login-inspo-left">
         <div className="login-inspo-brand">
           <div className="flex items-center gap-2.5">
-            <Link to="/" className="brand-logo-link">
-              <svg className="brand-cube-icon" viewBox="0 0 24 24" fill="currentColor">
-                <rect x="3" y="3" width="7.5" height="7.5" rx="1.5" />
-                <rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5" />
-                <rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5" />
-                <rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5" />
-              </svg>
+            <Link to="/" className="brand-logo-link flex items-center gap-2">
+              <img src="/images/nsuk-logo.png" alt="NSUK Crest" className="w-7 h-7 object-contain inline-block" />
               <span className="brand-title">CampusMarket</span>
             </Link>
-            <span className="brand-sub-badge hidden sm:inline-flex">LUC Verified</span>
+            <span className="brand-sub-badge hidden sm:inline-flex">NSUK Verified</span>
           </div>
 
           <Link to="/" className="brand-back-btn" aria-label="Back to website">
@@ -72,7 +61,7 @@ export default function LoginPage() {
         <div className="login-inspo-form-wrapper">
           <div className="login-inspo-header">
             <h1 className="login-inspo-title">Welcome back</h1>
-            <p className="login-inspo-subtitle">Please enter your Lincoln student details</p>
+            <p className="login-inspo-subtitle">Please enter your NSUK student login details</p>
           </div>
 
           {errorMsg && (
@@ -91,7 +80,7 @@ export default function LoginPage() {
                 id="email"
                 type="email"
                 className="inspo-input"
-                placeholder="e.g. nusaiba@lincoln.edu.my"
+                placeholder="e.g. student@nsuk.edu.ng or your email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -137,16 +126,6 @@ export default function LoginPage() {
             >
               {loading ? 'Signing in…' : 'Sign in'}
             </button>
-
-            <button
-              type="button"
-              className="inspo-btn-demo"
-              onClick={handleFillDemo}
-            >
-              <Zap className="w-3.5 h-3.5 inline mr-1 text-red-600 shrink-0" />
-              <span className="hidden sm:inline">Quick Fill PRD Demo Student (Nusaiba / ID: 010240376)</span>
-              <span className="sm:hidden">Fill Demo Student (Nusaiba)</span>
-            </button>
           </form>
 
           <p className="inspo-footer-prompt">
@@ -159,7 +138,7 @@ export default function LoginPage() {
           {/* Mobile Campus Safety Note */}
           <div className="login-mobile-trust-note md:hidden">
             <ShieldCheck className="w-4 h-4 text-red-600 shrink-0" />
-            <span>Lincoln University College Official Campus Marketplace</span>
+            <span>Nasarawa State University Keffi Official Campus Marketplace</span>
           </div>
         </div>
       </div>
@@ -170,7 +149,7 @@ export default function LoginPage() {
           <div className="inspo-art-card">
             <img
               src="/images/auth-illustration.jpg"
-              alt="Lincoln University College Student Marketplace Illustration"
+              alt="Nasarawa State University Keffi Student Marketplace Illustration"
               className="inspo-art-image"
             />
           </div>
@@ -178,7 +157,7 @@ export default function LoginPage() {
           <div className="inspo-trust-caption">
             <div className="trust-badge-pill">
               <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Lincoln University College Official Campus Marketplace</span>
+              <span>Nasarawa State University Keffi Official Campus Marketplace</span>
             </div>
             <p>Buy, sell, and exchange verified student textbooks, tech, and hostel gear safely on campus.</p>
           </div>

@@ -4,7 +4,6 @@ import {
   ArrowLeft,
   ShieldCheck,
   AlertCircle,
-  Zap,
   Lock,
   Download,
   Package,
@@ -139,16 +138,6 @@ export const AdminDashboardPage: React.FC = () => {
     setTimeout(() => setActionSuccess(null), 3500)
   }
 
-  const handleAdminQuickLogin = async () => {
-    setIsLoggingIn(true)
-    setLoginError(null)
-    const res = await login('nusaiba@lincoln.edu.my', 'password')
-    if (!res.success) {
-      setLoginError(res.message || 'Login failed.')
-    }
-    setIsLoggingIn(false)
-  }
-
   const handleManualLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoggingIn(true)
@@ -257,13 +246,8 @@ export const AdminDashboardPage: React.FC = () => {
         <div className="login-inspo-left">
           <div className="login-inspo-brand">
             <div className="flex items-center gap-3">
-              <Link to="/" className="brand-logo-link">
-                <svg className="brand-cube-icon" style={{ color: '#dc2626' }} viewBox="0 0 24 24" fill="currentColor">
-                  <rect x="3" y="3" width="7.5" height="7.5" rx="1.5" />
-                  <rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5" />
-                  <rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5" />
-                  <rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5" />
-                </svg>
+              <Link to="/" className="brand-logo-link flex items-center gap-2">
+                <img src="/images/nsuk-logo.png" alt="NSUK Crest" className="w-7 h-7 object-contain inline-block" />
                 <span className="brand-title">
                   CampusMarket <span style={{ color: '#dc2626', fontWeight: 600, fontSize: 14 }}>Admin</span>
                 </span>
@@ -292,35 +276,6 @@ export const AdminDashboardPage: React.FC = () => {
               </div>
             )}
 
-            {/* 1-Click Fast Unlock Card for Seeded Author/Admin */}
-            <div className="admin-quick-card">
-              <div className="admin-quick-header">
-                <span className="admin-quick-tag flex items-center gap-1">
-                  <Zap className="w-3.5 h-3.5 text-red-600" />
-                  <span>1-Click Fast Verification</span>
-                </span>
-                <span className="admin-quick-role">Author / Admin</span>
-              </div>
-              <div className="admin-quick-user">
-                <strong>Nusaiba Nussy Abdullahi</strong>
-                <span>Student ID: 010240376 · Role: admin</span>
-              </div>
-              <button
-                type="button"
-                onClick={handleAdminQuickLogin}
-                disabled={isLoggingIn}
-                className="inspo-btn-submit flex items-center justify-center gap-2"
-                style={{ background: 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)', boxShadow: '0 4px 14px rgba(220, 38, 38, 0.35)', marginTop: 8 }}
-              >
-                <Zap className="w-4 h-4" />
-                <span>{isLoggingIn ? 'Authenticating…' : 'Unlock Admin Dashboard (Nusaiba)'}</span>
-              </button>
-            </div>
-
-            <div className="admin-or-divider">
-              <span>or sign in with staff account</span>
-            </div>
-
             <form onSubmit={handleManualLogin} className="login-inspo-form">
               <div className="inspo-field">
                 <label htmlFor="admin-email" className="inspo-label">
@@ -332,7 +287,7 @@ export const AdminDashboardPage: React.FC = () => {
                   required
                   value={loginEmail}
                   onChange={(e) => setLoginEmail(e.target.value)}
-                  placeholder="e.g. staff@lincoln.edu.my or nusaiba@lincoln.edu.my"
+                  placeholder="e.g. staff@nsuk.edu.ng or nusaiba@nsuk.edu.ng"
                   className="inspo-input"
                 />
               </div>
@@ -364,7 +319,7 @@ export const AdminDashboardPage: React.FC = () => {
 
             <p className="inspo-footer-prompt flex items-center justify-center gap-1.5" style={{ fontSize: 12.5 }}>
               <Lock className="w-3.5 h-3.5 text-slate-400" />
-              <span>Restricted to Lincoln University College staff and appointed student moderators.</span>
+              <span>Restricted to Nasarawa State University Keffi (NSUK) staff and appointed student moderators.</span>
             </p>
           </div>
         </div>
@@ -375,7 +330,7 @@ export const AdminDashboardPage: React.FC = () => {
             <div className="inspo-art-card" style={{ borderColor: 'rgba(255, 255, 255, 0.22)' }}>
               <img
                 src="/images/auth-illustration.jpg"
-                alt="Lincoln University College Admin Operations Illustration"
+                alt="Nasarawa State University Keffi Admin Operations Illustration"
                 className="inspo-art-image"
               />
             </div>
@@ -383,7 +338,7 @@ export const AdminDashboardPage: React.FC = () => {
             <div className="inspo-trust-caption">
               <div className="trust-badge-pill" style={{ background: 'rgba(255, 255, 255, 0.2)' }}>
                 <ShieldCheck className="w-3.5 h-3.5" />
-                <span>Lincoln University College · Trust & Operations Console</span>
+                <span>Nasarawa State University Keffi · Trust & Operations Console</span>
               </div>
               <p>Platform telemetry, safety queues, user privilege controls, and audit enforcement.</p>
             </div>
@@ -405,7 +360,7 @@ export const AdminDashboardPage: React.FC = () => {
             </div>
             <h1 className="admin-hero-title">Trust & Operations Control</h1>
             <p className="admin-hero-sub">
-              Monitor active student trading, review open safety reports, manage campus spots, and enforce Lincoln University College guidelines.
+              Monitor active student trading, review open safety reports, manage campus spots, and enforce Nasarawa State University Keffi (NSUK) guidelines.
             </p>
           </div>
 
@@ -545,7 +500,7 @@ export const AdminDashboardPage: React.FC = () => {
                   <Tag className="w-4 h-4 text-red-600" />
                   <span>Active Marketplace Inventory by Category</span>
                 </h3>
-                <span className="admin-box-sub">Current distribution of goods and services listed by LUC students</span>
+                <span className="admin-box-sub">Current distribution of goods and services listed by NSUK students</span>
               </div>
               <div className="admin-category-grid">
                 {stats.categories.map((c) => (
@@ -966,7 +921,7 @@ export const AdminDashboardPage: React.FC = () => {
                   className="admin-input mono"
                 />
                 <span style={{ fontSize: 11, color: 'var(--text-soft)' }}>
-                  Default: lincoln.edu.my, student.luc.edu.my
+                  Default: nsuk.edu.ng, student.nsuk.edu.ng
                 </span>
               </div>
 

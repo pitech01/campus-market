@@ -159,7 +159,7 @@ export default function MyDealsPage() {
           Campus Deals & Exchanges
         </h2>
         <p className="text-slate-500 text-sm mb-6">
-          Please log in with your Lincoln University student account to manage your ongoing trade agreements.
+          Please log in with your Nasarawa State University Keffi (NSUK) student account to manage your ongoing trade agreements.
         </p>
         <Link
           to="/login"
@@ -446,7 +446,7 @@ export default function MyDealsPage() {
               <span>Rate & Review Student</span>
             </h3>
             <p className="text-xs text-slate-500 mb-4">
-              Share your exchange experience to keep Lincoln University marketplace trusted and safe.
+              Share your exchange experience to keep NSUK Campus Marketplace trusted and safe.
             </p>
 
             <form onSubmit={handleReviewSubmit} className="space-y-4">

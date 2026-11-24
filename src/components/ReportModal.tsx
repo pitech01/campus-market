@@ -22,7 +22,7 @@ const REPORT_REASONS: Record<string, string[]> = {
     'Other Violation',
   ],
   user: [
-    'Suspected Fake Account / Non-Lincoln Member',
+    'Suspected Fake Account / Non-NSUK Member',
     'Harassment or Abusive Conduct',
     'Attempted Scams or Payment Fraud',
     'Unresponsive / Repeatedly No-Shows at Agreed Meets',
@@ -97,7 +97,7 @@ export const ReportModal: React.FC<ReportModalProps> = ({
             </div>
             <div>
               <h3 style={{ fontSize: 16, fontWeight: 800, color: '#fff', margin: 0 }}>Report to Campus Moderation</h3>
-              <span style={{ fontSize: 11, color: '#ffe4e6', display: 'block' }}>Lincoln University College Trust & Safety</span>
+              <span style={{ fontSize: 11, color: '#ffe4e6', display: 'block' }}>Nasarawa State University Keffi Trust & Safety</span>
             </div>
           </div>
           <button

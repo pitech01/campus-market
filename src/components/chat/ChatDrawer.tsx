@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import {
   MessageSquare,
   X,
@@ -13,6 +13,9 @@ import {
   Camera,
   Check,
   Lock,
+  Flag,
+  AlertCircle,
+  AlertTriangle,
 } from 'lucide-react'
 import type {
   Conversation,
@@ -36,6 +39,7 @@ import {
 } from '../../lib/api'
 import { useAuth } from '../../lib/authContext'
 import PaystackPaymentModal from '../PaystackPaymentModal'
+import { ReportModal } from '../ReportModal'
 
 interface ChatDrawerProps {
   isOpen: boolean
@@ -60,6 +64,8 @@ export default function ChatDrawer({
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [, setIsLoading] = useState(false)
   const [isSending, setIsSending] = useState(false)
+  const [chatError, setChatError] = useState<string | null>(null)
+  const [reportModalOpen, setReportModalOpen] = useState(false)
 
   // Deal modal state
   const [showDealModal, setShowDealModal] = useState(false)
@@ -80,6 +86,20 @@ export default function ChatDrawer({
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+
+  // Safety detection (FR-CHT-09): warning when off-platform numbers or links are typed
+  const isOffPlatformWarning = useMemo(() => {
+    if (!inputText) return false
+    const phonePattern = /(\+?\d{1,4}?[-.\s]?\(?\d{1,4}?\)?[-.\s]?\d{3,4}[-.\s]?\d{3,4})/
+    const linkPattern = /(https?:\/\/|www\.|wa\.me|t\.me|\.com|\.my|\.ng|\.net)/i
+    return phonePattern.test(inputText) || linkPattern.test(inputText)
+  }, [inputText])
+
+  const quickPrompts = [
+    '👋 Hi, is this item still available?',
+    '📍 Can we meet at NSUK Central Library / Senate Building foyer?',
+    '💰 Is the price negotiable for students?',
+  ]
 
   // Fetch meeting locations for deals
   useEffect(() => {
@@ -121,16 +141,18 @@ export default function ChatDrawer({
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
-  const loadConversations = async () => {
+  const loadConversations = async (preferredId?: number | null) => {
     try {
       setIsLoading(true)
       const list = await getConversations()
       setConversations(list)
-      if (list.length > 0 && !activeConversationId) {
-        setActiveConversationId(list[0].id)
+      if (preferredId) {
+        setActiveConversationId(preferredId)
+      } else if (list.length > 0) {
+        setActiveConversationId((prev) => prev ?? list[0].id)
       }
-    } catch {
-      // ignore
+    } catch (err: any) {
+      console.error('Failed to load conversations:', err)
     } finally {
       setIsLoading(false)
     }
@@ -139,12 +161,26 @@ export default function ChatDrawer({
   const initListingChat = async (listing: Listing) => {
     try {
       setIsLoading(true)
+      setChatError(null)
+
+      const sellerId = listing.seller_id || (listing as any).seller?.id
+      if (user && sellerId && Number(user.id) === Number(sellerId)) {
+        setChatError('You are the seller of this listing. Inquiries from other students will appear in your inbox.')
+        await loadConversations()
+        return
+      }
+
       const { startConversation } = await import('../../lib/api')
       const conv = await startConversation(listing.id)
       setActiveConversationId(conv.id)
+      setActiveConversation(conv)
+      await loadConversations(conv.id)
+      await loadThread(conv.id)
+    } catch (err: any) {
+      console.error('Failed to init conversation:', err)
+      const msg = err?.message || 'Unable to open conversation.'
+      setChatError(msg)
       await loadConversations()
-    } catch {
-      // ignore
     } finally {
       setIsLoading(false)
     }
@@ -156,8 +192,8 @@ export default function ChatDrawer({
       const res = await getConversationThread(id)
       setActiveConversation(res.conversation)
       setMessages(res.messages)
-    } catch {
-      // ignore
+    } catch (err: any) {
+      console.error('Failed to load thread:', err)
     } finally {
       if (!silent) setIsLoading(false)
     }
@@ -167,16 +203,20 @@ export default function ChatDrawer({
     e.preventDefault()
     if ((!inputText.trim() && !selectedImage) || !activeConversationId || isSending) return
 
+    const textToSend = inputText.trim()
+    const imageToSend = selectedImage
+
     try {
       setIsSending(true)
-      const newMsg = await sendMessage(activeConversationId, inputText.trim(), selectedImage || undefined)
+      setChatError(null)
+      const newMsg = await sendMessage(activeConversationId, textToSend, imageToSend || undefined)
       setMessages((prev) => [...prev, newMsg])
       setInputText('')
       setSelectedImage(null)
       setImagePreview(null)
-      loadConversations()
-    } catch {
-      alert('Failed to send message. Please try again.')
+      loadConversations(activeConversationId)
+    } catch (err: any) {
+      setChatError(err?.message || 'Failed to send message. Please try again.')
     } finally {
       setIsSending(false)
     }
@@ -261,7 +301,7 @@ export default function ChatDrawer({
       await submitReview(reviewedDealId, reviewRating, reviewComment)
       setShowReviewModal(false)
       setReviewComment('')
-      alert('Review submitted! Thank you for helping keep Lincoln Marketplace trusted.')
+      alert('Review submitted! Thank you for helping keep NSUK Marketplace trusted.')
     } catch (err: any) {
       alert(err?.message || 'Failed to submit review.')
     } finally {
@@ -305,7 +345,7 @@ export default function ChatDrawer({
               </div>
               <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Student Sign-In Required</h4>
               <p className="text-sm text-slate-500 dark:text-slate-400 max-w-xs mx-auto mb-6">
-                To prevent spam and keep Lincoln University students safe, please sign in with your student account to message sellers and propose deals.
+                To prevent spam and keep Nasarawa State University Keffi (NSUK) students safe, please sign in with your student account to message sellers and propose deals.
               </p>
               <div className="flex flex-col gap-3">
                 <a
@@ -324,7 +364,7 @@ export default function ChatDrawer({
             </div>
           </div>
           <div className="text-center text-xs text-slate-400 pb-2">
-            Lincoln University College Marketplace · Peer to Peer Safety
+            Nasarawa State University Keffi Marketplace · Peer to Peer Safety
           </div>
         </div>
       </div>
@@ -346,7 +386,7 @@ export default function ChatDrawer({
             </div>
             <div>
               <h2 className="font-bold text-base text-white">Campus Messenger & Deals</h2>
-              <p className="text-xs text-slate-400">Direct peer-to-peer student trading (Lincoln University)</p>
+              <p className="text-xs text-slate-400">Direct peer-to-peer student trading (NSUK Keffi)</p>
             </div>
           </div>
           <button
@@ -435,12 +475,12 @@ export default function ChatDrawer({
                         {otherUser?.campus_verified && (
                           <span className="bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-900/60 text-[10px] font-semibold px-1.5 py-0.5 rounded inline-flex items-center gap-1">
                             <CheckCircle2 className="w-3 h-3 text-red-600 dark:text-red-400" />
-                            <span>LUC Verified</span>
+                            <span>NSUK Verified</span>
                           </span>
                         )}
                       </div>
                       <p className="text-[11px] text-slate-500 inline-flex items-center gap-1">
-                        <span>{otherUser?.faculty || 'Lincoln Student'}</span>
+                        <span>{otherUser?.faculty || 'NSUK Student'}</span>
                         <span>•</span>
                         <Star className="w-3 h-3 text-amber-500 fill-amber-400" />
                         <span>{otherUser?.average_rating || '5.0'}</span>
@@ -450,19 +490,30 @@ export default function ChatDrawer({
                   <div className="flex items-center space-x-2">
                     <button
                       onClick={() => setShowDealModal(true)}
-                      className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold shadow-sm transition inline-flex items-center gap-1"
+                      className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold shadow-sm transition inline-flex items-center gap-1 cursor-pointer"
                     >
                       <Handshake className="w-3.5 h-3.5" />
                       <span>Propose Deal</span>
                     </button>
                     {otherUser && (
-                      <button
-                        onClick={() => handleBlockUser(otherUser.id)}
-                        className="text-xs text-slate-400 hover:text-red-500 p-1.5 rounded transition"
-                        title="Block User"
-                      >
-                        <Ban className="w-4 h-4" />
-                      </button>
+                      <>
+                        <button
+                          type="button"
+                          onClick={() => setReportModalOpen(true)}
+                          className="text-xs text-slate-400 hover:text-red-500 p-1.5 rounded transition cursor-pointer"
+                          title="Report User or Messages"
+                        >
+                          <Flag className="w-4 h-4" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleBlockUser(otherUser.id)}
+                          className="text-xs text-slate-400 hover:text-red-500 p-1.5 rounded transition cursor-pointer"
+                          title="Block User"
+                        >
+                          <Ban className="w-4 h-4" />
+                        </button>
+                      </>
                     )}
                   </div>
                 </div>
@@ -474,6 +525,23 @@ export default function ChatDrawer({
                     <span><strong>Safety Tips:</strong> Meet at official campus spots (Library/Cafeteria). Inspect item before paying.</span>
                   </span>
                 </div>
+
+                {/* Error Banner */}
+                {chatError && (
+                  <div className="bg-amber-50 dark:bg-amber-950/40 border-b border-amber-200 dark:border-amber-900/50 px-3 py-2 flex items-center justify-between text-xs text-amber-800 dark:text-amber-300">
+                    <span className="inline-flex items-center gap-1.5">
+                      <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
+                      <span>{chatError}</span>
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setChatError(null)}
+                      className="text-slate-400 hover:text-slate-600 dark:hover:text-white p-1"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                )}
 
                 {/* Listing Snapshot Bar */}
                 {listing && (
@@ -634,13 +702,25 @@ export default function ChatDrawer({
                       <p className="font-semibold text-slate-600 dark:text-slate-300">
                         Start the conversation with {otherUser?.name || 'the student'}!
                       </p>
-                      <p className="mt-1">
+                      <p className="mt-1 max-w-xs mb-3">
                         Ask about condition, confirm pickup spots, or agree on a price.
                       </p>
+                      <div className="flex flex-wrap gap-1.5 justify-center max-w-sm">
+                        {quickPrompts.map((prompt) => (
+                          <button
+                            key={prompt}
+                            type="button"
+                            onClick={() => setInputText(prompt)}
+                            className="text-[11px] px-2.5 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-emerald-50 dark:hover:bg-emerald-950 text-slate-700 dark:text-slate-300 hover:text-emerald-700 dark:hover:text-emerald-300 rounded-full border border-slate-200 dark:border-slate-700 transition cursor-pointer"
+                          >
+                            {prompt}
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   ) : (
                     messages.map((msg) => {
-                      const isMe = msg.sender_id === user?.id
+                      const isMe = Number(msg.sender_id) === Number(user?.id)
                       return (
                         <div
                           key={msg.id}
@@ -669,6 +749,14 @@ export default function ChatDrawer({
                   )}
                   <div ref={messagesEndRef} />
                 </div>
+
+                {/* Off-platform Safety Warning (FR-CHT-09) */}
+                {isOffPlatformWarning && (
+                  <div className="px-3 py-1.5 bg-amber-50 dark:bg-amber-950/60 border-t border-amber-200 dark:border-amber-900/60 text-[11px] text-amber-800 dark:text-amber-300 flex items-center gap-1.5">
+                    <AlertTriangle className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                    <span><strong>Safety Notice:</strong> To ensure verified campus handover and escrow protection, keep communication inside NSUK Campus Marketplace.</span>
+                  </div>
+                )}
 
                 {/* Input Bar */}
                 <form onSubmit={handleSendMessage} className="p-3 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
@@ -846,7 +934,7 @@ export default function ChatDrawer({
               <span>Rate & Review Student</span>
             </h3>
             <p className="text-xs text-slate-500 mb-4">
-              How was your campus exchange experience? Your review helps keep Lincoln University marketplace safe.
+              How was your campus exchange experience? Your review helps keep NSUK Campus Marketplace safe.
             </p>
 
             <form onSubmit={handleReviewSubmit} className="space-y-4">
@@ -912,6 +1000,20 @@ export default function ChatDrawer({
         <PaystackPaymentModal
           deal={paystackModalDeal}
           onClose={() => setPaystackModalDeal(null)}
+        />
+      )}
+
+      {/* Report User / Chat Modal (FR-CHT-07) */}
+      {reportModalOpen && otherUser && (
+        <ReportModal
+          isOpen={reportModalOpen}
+          onClose={() => setReportModalOpen(false)}
+          reportableType="user"
+          reportableId={otherUser.id}
+          targetTitle={`User: ${otherUser.name}`}
+          onReportSubmitted={() => {
+            setChatError('Report submitted to NSUK campus moderation team.')
+          }}
         />
       )}
     </div>

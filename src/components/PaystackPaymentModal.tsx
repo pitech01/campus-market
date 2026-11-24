@@ -27,7 +27,7 @@ export default function PaystackPaymentModal({
   const activeListing = deal?.listing || listing
   const finalAmount = customAmount ?? (deal?.agreed_price ? Number(deal.agreed_price) : Number(activeListing?.price || 0))
   const currencySymbol = activeListing?.currency === 'RM' ? 'RM' : '₦'
-  const meetingSpot = deal?.meeting_location?.name || activeListing?.location || 'Lincoln Main Library'
+  const meetingSpot = deal?.meeting_location?.name || activeListing?.location || 'NSUK Central Library / Senate Building Foyer'
 
   // If user is not signed in, show a dedicated, friendly authentication card
   if (!isAuthenticated) {
@@ -44,7 +44,7 @@ export default function PaystackPaymentModal({
               </div>
               <div>
                 <h3 className="paystack-modal-title text-white">Sign In Required</h3>
-                <span className="paystack-modal-subtitle text-red-100">Lincoln University College Escrow</span>
+                <span className="paystack-modal-subtitle text-red-100">NSUK Keffi Campus Escrow</span>
               </div>
             </div>
             <button
@@ -66,7 +66,7 @@ export default function PaystackPaymentModal({
             <div>
               <h4 className="text-lg font-bold text-slate-900 dark:text-white">Sign in to Purchase</h4>
               <p className="text-sm text-slate-500 dark:text-slate-400 mt-1.5 leading-relaxed">
-                To guarantee 100% student escrow protection and secure meetups on campus, you must be signed in with your Lincoln University student account.
+                To guarantee 100% student escrow protection and secure meetups on campus, you must be signed in with your NSUK student account.
               </p>
             </div>
 
@@ -117,7 +117,7 @@ export default function PaystackPaymentModal({
 
         const handler = (window as any).PaystackPop.setup({
           key: publicKey,
-          email: user?.email || 'student@lincoln.edu.my',
+          email: user?.email || 'student@nsuk.edu.ng',
           amount: amountInKobo,
           currency: activeListing?.currency === 'RM' ? 'MYR' : 'NGN',
           ref: reference,
@@ -193,7 +193,7 @@ export default function PaystackPaymentModal({
             </div>
             <div>
               <h3 className="paystack-modal-title">Paystack Campus Escrow</h3>
-              <span className="paystack-modal-subtitle">100% Buyer Protection · Lincoln University College</span>
+              <span className="paystack-modal-subtitle">100% Buyer Protection · Nasarawa State University Keffi (NSUK)</span>
             </div>
           </div>
           <button
@@ -248,7 +248,7 @@ export default function PaystackPaymentModal({
                 <div className="paystack-meta-row">
                   <span className="paystack-meta-pill">
                     <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                    <span>LUC Verified Deal</span>
+                    <span>NSUK Verified Deal</span>
                   </span>
                   <span className="paystack-meta-spot">{meetingSpot}</span>
                 </div>

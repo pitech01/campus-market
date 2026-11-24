@@ -1,6 +1,6 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { ArrowLeft, Zap, ShieldCheck, AlertCircle } from 'lucide-react'
+import { ArrowLeft, ShieldCheck, AlertCircle } from 'lucide-react'
 import { useAuth } from '../lib/authContext'
 
 export default function RegisterPage() {
@@ -38,19 +38,6 @@ export default function RegisterPage() {
       setGeneralError(null)
     }
 
-  const handleFillDemo = () => {
-    const randomSuffix = Math.floor(1000 + Math.random() * 9000)
-    setForm({
-      name: 'Nusaiba Nussy Abdullahi',
-      student_id: `01024${randomSuffix}`,
-      email: `nussy.${randomSuffix}@lincoln.edu.my`,
-      password: 'password123',
-      password_confirmation: 'password123',
-    })
-    setFieldErrors({})
-    setGeneralError(null)
-  }
-
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault()
     setLoading(true)
@@ -82,16 +69,11 @@ export default function RegisterPage() {
       <div className="login-inspo-left">
         <div className="login-inspo-brand">
           <div className="flex items-center gap-2.5">
-            <Link to="/" className="brand-logo-link">
-              <svg className="brand-cube-icon" viewBox="0 0 24 24" fill="currentColor">
-                <rect x="3" y="3" width="7.5" height="7.5" rx="1.5" />
-                <rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5" />
-                <rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5" />
-                <rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5" />
-              </svg>
+            <Link to="/" className="brand-logo-link flex items-center gap-2">
+              <img src="/images/nsuk-logo.png" alt="NSUK Crest" className="w-7 h-7 object-contain inline-block" />
               <span className="brand-title">CampusMarket</span>
             </Link>
-            <span className="brand-sub-badge hidden sm:inline-flex">LUC Verified</span>
+            <span className="brand-sub-badge hidden sm:inline-flex">NSUK Verified</span>
           </div>
 
           <Link to="/" className="brand-back-btn" aria-label="Back to website">
@@ -104,7 +86,7 @@ export default function RegisterPage() {
         <div className="login-inspo-form-wrapper" style={{ maxWidth: 460 }}>
           <div className="login-inspo-header">
             <h1 className="login-inspo-title">Create account</h1>
-            <p className="login-inspo-subtitle">Enter your Lincoln University student details to register</p>
+            <p className="login-inspo-subtitle">Enter your details to register on NSUK Campus Market</p>
           </div>
 
           {/* Account Role / Intent Selector */}
@@ -210,7 +192,7 @@ export default function RegisterPage() {
                 id="reg-student-id"
                 type="text"
                 className="inspo-input"
-                placeholder="e.g. 010240376"
+                placeholder="e.g. NSUK/NAS/2023/1042"
                 required
                 value={form.student_id}
                 onChange={updateField('student_id')}
@@ -228,7 +210,7 @@ export default function RegisterPage() {
                 id="reg-email"
                 type="email"
                 className="inspo-input"
-                placeholder="e.g. nusaiba@lincoln.edu.my or student@gmail.com"
+                placeholder="e.g. nusaiba@nsuk.edu.ng or student@gmail.com"
                 required
                 value={form.email}
                 onChange={updateField('email')}
@@ -290,16 +272,6 @@ export default function RegisterPage() {
             >
               {loading ? 'Verifying & Registering…' : 'Register student account'}
             </button>
-
-            <button
-              type="button"
-              className="inspo-btn-demo"
-              onClick={handleFillDemo}
-            >
-              <Zap className="w-3.5 h-3.5 inline mr-1 text-red-600 shrink-0" />
-              <span className="hidden sm:inline">Auto-fill PRD Student Demo Details</span>
-              <span className="sm:hidden">Fill Demo Student</span>
-            </button>
           </form>
 
           <p className="inspo-footer-prompt">
@@ -317,7 +289,7 @@ export default function RegisterPage() {
           <div className="inspo-art-card">
             <img
               src="/images/auth-illustration.jpg"
-              alt="Lincoln University College Student Marketplace Illustration"
+              alt="Nasarawa State University Keffi Student Marketplace Illustration"
               className="inspo-art-image"
             />
           </div>
@@ -325,9 +297,9 @@ export default function RegisterPage() {
           <div className="inspo-trust-caption">
             <div className="trust-badge-pill">
               <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Lincoln University College Official Campus Marketplace</span>
+              <span>Nasarawa State University Keffi Official Campus Marketplace</span>
             </div>
-            <p>Join thousands of verified Lincoln students buying, selling, and swapping securely.</p>
+            <p>Join thousands of verified NSUK students buying, selling, and swapping securely.</p>
           </div>
         </div>
       </div>

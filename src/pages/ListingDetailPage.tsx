@@ -102,16 +102,15 @@ export default function ListingDetailPage() {
   }
 
   const isMine =
-    (user && listing.seller_id === user.id) ||
-    listing.sellerName === 'You' ||
-    (user && (listing as any).seller?.id === user.id)
+    (user && (Number(listing.seller_id) === Number(user.id) || Number((listing as any).seller?.id) === Number(user.id))) ||
+    listing.sellerName === 'You'
 
-  const sellerName = (listing as any).seller?.name || listing.sellerName || 'Lincoln Student'
+  const sellerName = (listing as any).seller?.name || listing.sellerName || 'NSUK Student'
   const sellerInitial = (listing as any).seller?.name?.charAt(0) || listing.sellerInitial || 'S'
   const sellerAvatar = (listing as any).seller?.avatar_url || listing.sellerAvatar
   const sellerRating = (listing as any).seller?.average_rating || listing.sellerRating || 5.0
   const sellerReviews = (listing as any).seller?.reviews_count || listing.sellerReviewsCount || 0
-  const meetingSpotName = listing.meeting_location?.name || listing.location || 'Lincoln Main Library'
+  const meetingSpotName = listing.meeting_location?.name || listing.location || 'NSUK Central Library / Senate Building Foyer'
 
   const handleFavoriteToggle = async () => {
     if (!isAuthenticated) {
@@ -328,8 +327,8 @@ export default function ListingDetailPage() {
               <div className="seller-card-info">
                 <div className="seller-name-row">
                   <h4>{sellerName}</h4>
-                  <span className="verified-student-pill inline-flex items-center gap-1" title="Verified Lincoln University College Student">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> Verified LUC ID
+                  <span className="verified-student-pill inline-flex items-center gap-1" title="Verified Nasarawa State University Keffi Student">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> Verified NSUK Student
                   </span>
                 </div>
                 <div className="seller-stats-line">
@@ -349,6 +348,26 @@ export default function ListingDetailPage() {
               <Shield className="w-4 h-4 text-emerald-600" />
               <span>Safe campus handover agreed at {meetingSpotName}</span>
             </div>
+
+            {/* Direct Vendor / Seller Chat Action */}
+            {!isMine && (
+              <div className="pt-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (!isAuthenticated) {
+                      navigate(`/login?redirect=${encodeURIComponent(window.location.pathname)}`)
+                      return
+                    }
+                    setChatDrawerOpen(true)
+                  }}
+                  className="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 shadow-xs cursor-pointer"
+                >
+                  <MessageSquare className="w-4 h-4" />
+                  <span>Chat with Vendor ({sellerName})</span>
+                </button>
+              </div>
+            )}
 
             {/* Safety & Reporting Link (FR-MOD-01) */}
             {!isMine && (

@@ -5,6 +5,7 @@ interface HeroProps {
   query: string
   onQueryChange: (value: string) => void
   onTrendingClick: (tag: string) => void
+  onSearchSubmit?: () => void
 }
 
 const TRENDING_TAGS = [
@@ -18,26 +19,26 @@ const TRENDING_TAGS = [
 
 const HERO_SLIDES = [
   {
-    eyebrow: 'Exclusive Campus Deals',
+    eyebrow: 'NSUK Student Exclusives',
     title: 'Buy, Sell & Swap on Campus.',
     highlight: 'Zero Fees.',
-    image: '/images/students/hero-students-1.jpg',
+    image: '/images/nsuk-gate-hd.jpg',
   },
   {
-    eyebrow: 'Semester Move-Out Season',
-    title: 'Clear Your Dorm Room.',
+    eyebrow: 'NSUK Senate & Safe Meetups',
+    title: 'Safe Handover Meetup Spots.',
+    highlight: 'Across Keffi Campus.',
+    image: '/images/nsuk-senate-building.jpg',
+  },
+  {
+    eyebrow: 'NSUK Official Marketplace',
+    title: 'Connect with Coursemates.',
     highlight: 'In Minutes.',
-    image: '/images/students/hero-students-2.jpg',
-  },
-  {
-    eyebrow: 'New Semester Essentials',
-    title: 'Grab Textbooks Before',
-    highlight: 'Class Starts.',
-    image: '/images/students/hero-students-3.jpg',
+    image: '/images/nsuk-official-hero-1.jpg',
   },
 ]
 
-export default function Hero({ query, onQueryChange, onTrendingClick }: HeroProps) {
+export default function Hero({ query, onQueryChange, onTrendingClick, onSearchSubmit }: HeroProps) {
   const [slide, setSlide] = useState(0)
   const active = HERO_SLIDES[slide]
 
@@ -58,14 +59,19 @@ export default function Hero({ query, onQueryChange, onTrendingClick }: HeroProp
           </h1>
 
           <p className="hero-sub">
-            The verified marketplace for LUC students. Grab textbooks, dorm gear, electronics
-            and fashion from classmates next door — meet up safely at the library or hostel in minutes.
+            The verified marketplace for Nasarawa State University Keffi (NSUK) students. Grab textbooks, dorm gear, electronics
+            and fashion from coursemates next door — meet up safely at Angwan Lambu, Central Library, or Main Gate in minutes.
           </p>
 
           <form
             className="search-bar"
             role="search"
-            onSubmit={(event) => event.preventDefault()}
+            onSubmit={(event) => {
+              event.preventDefault()
+              if (onSearchSubmit) {
+                onSearchSubmit()
+              }
+            }}
           >
             <Icon name="icon-search" className="search-icon" />
             <input
@@ -157,7 +163,7 @@ export default function Hero({ query, onQueryChange, onTrendingClick }: HeroProp
           <Icon name="icon-shield" className="hero-stat-icon text-primary" />
           <div className="hero-stat-text">
             <strong>Verified Students</strong>
-            <span>LUC Student ID check</span>
+            <span>NSUK Student ID check</span>
           </div>
         </div>
         <div className="hero-stat-card">

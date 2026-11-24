@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useSearchParams, useNavigate } from 'react-router-dom'
 import {
-  Star,
   Handshake,
   Settings,
   CheckCircle2,
@@ -136,8 +135,8 @@ export default function ProfilePage() {
   const soldCount = listings.length - activeCount
 
   const studentName = user?.name || 'Nusaiba Nussy Abdullahi'
-  const studentId = user?.student_id || '010240376'
-  const studentEmail = user?.email || 'nusaiba@lincoln.edu.my'
+  const studentId = user?.student_id || 'NSUK/NAS/2023/1042'
+  const studentEmail = user?.email || 'nusaiba@nsuk.edu.ng'
 
   if (!isAuthenticated) {
     return (
@@ -171,17 +170,11 @@ export default function ProfilePage() {
           <div className="student-meta-info">
             <div className="student-name-row">
               <h2>{studentName}</h2>
-              <span className="verified-student-badge inline-flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> Verified Lincoln UC Student
-              </span>
             </div>
             <p className="student-campus-id">
               Student ID: <strong>{studentId}</strong> · {studentEmail}
             </p>
             <div className="student-credibility-pills">
-              <span className="cred-pill inline-flex items-center gap-1.5">
-                <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-400" /> {user?.average_rating || '5.0'} Rating
-              </span>
               <span className="cred-pill inline-flex items-center gap-1.5">
                 <Tag className="w-3.5 h-3.5 text-slate-500" /> {listings.length} Items Listed
               </span>
@@ -294,7 +287,7 @@ export default function ProfilePage() {
 
                       <div className="profile-item-location inline-flex items-center gap-1.5">
                         <MapPin className="w-3.5 h-3.5 text-slate-500" />
-                        <span>{listing.meeting_location?.name || listing.location || 'Lincoln Campus'}</span>
+                        <span>{listing.meeting_location?.name || listing.location || 'NSUK Campus, Keffi'}</span>
                       </div>
 
                       <div className="profile-item-actions">

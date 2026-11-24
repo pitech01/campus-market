@@ -48,16 +48,11 @@ export const ResetPasswordPage: React.FC = () => {
       <div className="login-inspo-left">
         <div className="login-inspo-brand">
           <div className="flex items-center gap-2.5">
-            <Link to="/" className="brand-logo-link">
-              <svg className="brand-cube-icon" viewBox="0 0 24 24" fill="currentColor">
-                <rect x="3" y="3" width="7.5" height="7.5" rx="1.5" />
-                <rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5" />
-                <rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5" />
-                <rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5" />
-              </svg>
+            <Link to="/" className="brand-logo-link flex items-center gap-2">
+              <img src="/images/nsuk-logo.png" alt="NSUK Crest" className="w-7 h-7 object-contain inline-block" />
               <span className="brand-title">CampusMarket</span>
             </Link>
-            <span className="brand-sub-badge hidden sm:inline-flex">LUC Verified</span>
+            <span className="brand-sub-badge hidden sm:inline-flex">NSUK Verified</span>
           </div>
 
           <Link to="/" className="brand-back-btn" aria-label="Back to website">
@@ -100,7 +95,7 @@ export const ResetPasswordPage: React.FC = () => {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="e.g. nusaiba@lincoln.edu.my or student@gmail.com"
+                  placeholder="e.g. nusaiba@nsuk.edu.ng or student@nsuk.edu.ng"
                   className="inspo-input"
                 />
               </div>
@@ -177,7 +172,7 @@ export const ResetPasswordPage: React.FC = () => {
           <div className="inspo-art-card">
             <img
               src="/images/auth-illustration.jpg"
-              alt="Lincoln University College Student Marketplace Illustration"
+              alt="Nasarawa State University Keffi Student Marketplace Illustration"
               className="inspo-art-image"
             />
           </div>
@@ -185,7 +180,7 @@ export const ResetPasswordPage: React.FC = () => {
           <div className="inspo-trust-caption">
             <div className="trust-badge-pill">
               <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Lincoln University College Official Campus Marketplace</span>
+              <span>Nasarawa State University Keffi Official Campus Marketplace</span>
             </div>
             <p>Your password is encrypted and stored safely with student privacy guarantees.</p>
           </div>

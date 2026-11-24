@@ -4,6 +4,8 @@ import Icon from './Icon'
 export type SortOption = 'newest' | 'price-asc' | 'price-desc' | 'popular'
 
 interface FilterBarProps {
+  query?: string
+  onQueryChange?: (query: string) => void
   sortOption: SortOption
   onSortChange: (sort: SortOption) => void
   selectedCondition: ItemCondition | 'all'
@@ -24,6 +26,8 @@ const CONDITIONS: (ItemCondition | 'all')[] = [
 ]
 
 export default function FilterBar({
+  query,
+  onQueryChange,
   sortOption,
   onSortChange,
   selectedCondition,
@@ -52,6 +56,31 @@ export default function FilterBar({
         </div>
 
         <div className="filter-controls-group">
+          {/* Quick Keyword Search in FilterBar */}
+          {onQueryChange && (
+            <div className="filter-search-wrapper">
+              <Icon name="icon-search" className="select-icon" />
+              <input
+                type="search"
+                value={query || ''}
+                onChange={(e) => onQueryChange(e.target.value)}
+                placeholder="Search listings..."
+                className="filter-search-input"
+                aria-label="Filter listings by keyword"
+              />
+              {query && (
+                <button
+                  type="button"
+                  className="filter-search-clear-btn"
+                  onClick={() => onQueryChange('')}
+                  aria-label="Clear keyword search"
+                >
+                  <Icon name="icon-close" />
+                </button>
+              )}
+            </div>
+          )}
+
           {/* Location selector */}
           <div className="filter-select-wrapper">
             <Icon name="icon-map-pin" className="select-icon" />

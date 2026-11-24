@@ -73,6 +73,7 @@ export interface ListingFilterParams {
   condition?: string
   listing_type?: string
   meeting_location_id?: number
+  location?: string
   min_price?: number
   max_price?: number
   status?: string
@@ -156,10 +157,11 @@ export async function getConversations(): Promise<Conversation[]> {
 }
 
 export async function startConversation(listingId: number | string): Promise<Conversation> {
+  const numericId = typeof listingId === 'number' ? listingId : (parseInt(String(listingId).replace(/\D/g, ''), 10) || listingId)
   const data = await request<{ data: Conversation }>('/conversations', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ listing_id: listingId }),
+    body: JSON.stringify({ listing_id: numericId }),
   })
   return data.data
 }

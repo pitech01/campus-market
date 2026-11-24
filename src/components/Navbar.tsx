@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
   Handshake,
   Heart,
@@ -15,6 +15,7 @@ import {
   Sparkles,
   Shield,
   ChevronRight,
+  Search,
 } from 'lucide-react'
 import Icon from './Icon'
 import { useFavorites } from '../lib/favoritesContext'
@@ -25,9 +26,26 @@ import NotificationDropdown from './NotificationDropdown'
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [chatOpen, setChatOpen] = useState(false)
+  const [navSearch, setNavSearch] = useState('')
   const location = useLocation()
+  const navigate = useNavigate()
   const { favoriteCount } = useFavorites()
   const { user, isAuthenticated, logout } = useAuth()
+
+  const handleNavSearch = (e: React.FormEvent) => {
+    e.preventDefault()
+    const trimmed = navSearch.trim()
+    if (!trimmed) return
+    navigate(`/?q=${encodeURIComponent(trimmed)}#browse-section`)
+    setNavSearch('')
+    setMenuOpen(false)
+    setTimeout(() => {
+      const el = document.getElementById('browse-section')
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' })
+      }
+    }, 120)
+  }
 
   // Close mobile drawer on route navigation
   useEffect(() => {
@@ -66,10 +84,10 @@ export default function Navbar() {
           <div className="topbar-msg">
             <ShieldCheck className="w-3.5 h-3.5 inline text-emerald-400 flex-shrink-0" />
             <span className="topbar-text-desktop">
-              Lincoln University College, Malaysia — Safe Peer-to-Peer Student Marketplace.
+              Nasarawa State University, Keffi — Safe Peer-to-Peer Student Marketplace.
             </span>
             <span className="topbar-text-mobile">
-              LUC Malaysia · Safe Student Marketplace
+              NSUK Keffi · Safe Student Marketplace
             </span>
           </div>
           <div className="topbar-links">
@@ -93,15 +111,38 @@ export default function Navbar() {
       <header className="navbar">
         <div className="navbar-inner">
           {/* Brand Logo */}
-          <Link className="brand" to="/" aria-label="Lincoln Campus Market Home">
-            <div className="brand-badge">
-              <span className="brand-logo-text">LUC</span>
+          <Link className="brand" to="/" aria-label="NSUK Campus Market Home">
+            <div className="brand-badge" style={{ background: '#ffffff', padding: 2, border: '1.5px solid rgba(220, 38, 38, 0.4)' }}>
+              <img src="/images/nsuk-logo.png" alt="NSUK Crest" style={{ width: 26, height: 26, objectFit: 'contain' }} />
             </div>
             <div className="brand-text-group">
               <span className="brand-name">Campus Market</span>
-              <span className="brand-campus-pill">Lincoln Uni</span>
+              <span className="brand-campus-pill">Keffi</span>
             </div>
           </Link>
+
+          {/* Desktop Search Bar */}
+          <form className="navbar-search-bar desktop-only-btn" onSubmit={handleNavSearch} role="search">
+            <Search className="navbar-search-icon" />
+            <input
+              type="search"
+              placeholder="Search marketplace..."
+              value={navSearch}
+              onChange={(e) => setNavSearch(e.target.value)}
+              className="navbar-search-input"
+              aria-label="Search marketplace"
+            />
+            {navSearch && (
+              <button
+                type="button"
+                className="navbar-search-clear"
+                onClick={() => setNavSearch('')}
+                aria-label="Clear search"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </form>
 
           {/* Desktop Navigation Links */}
           <nav className="navbar-links" aria-label="Main Navigation">
@@ -213,11 +254,11 @@ export default function Navbar() {
             <div className="mobile-drawer-header">
               <Link to="/" className="brand" onClick={() => setMenuOpen(false)}>
                 <div className="brand-badge">
-                  <span className="brand-logo-text">LUC</span>
+                  <span className="brand-logo-text">NSUK</span>
                 </div>
                 <div className="brand-text-group">
                   <span className="brand-name">Campus Market</span>
-                  <span className="brand-campus-pill">Lincoln Uni</span>
+                  <span className="brand-campus-pill">Keffi</span>
                 </div>
               </Link>
               <button
@@ -241,14 +282,14 @@ export default function Navbar() {
                     <div className="mobile-user-name">{user?.name}</div>
                     <div className="mobile-user-sub">
                       <ShieldCheck className="w-3.5 h-3.5 text-emerald-500 inline mr-1 flex-shrink-0" />
-                      <span>{user?.student_id ? `LUC ID: ${user.student_id}` : 'Verified Student'}</span>
+                      <span>{user?.student_id ? `NSUK ID: ${user.student_id}` : 'Verified Student'}</span>
                     </div>
                   </div>
                 </div>
               ) : (
                 <div className="mobile-guest-card">
-                  <div className="mobile-guest-title">Join Lincoln Campus Market</div>
-                  <p className="mobile-guest-desc">Buy, sell & trade safely with verified LUC students.</p>
+                  <div className="mobile-guest-title">Join NSUK Campus Market</div>
+                  <p className="mobile-guest-desc">Buy, sell & trade safely with verified NSUK students.</p>
                   <div className="mobile-guest-actions">
                     <Link
                       to="/login"
@@ -270,6 +311,29 @@ export default function Navbar() {
                 </div>
               )}
             </div>
+
+            {/* Quick Search in Mobile Drawer */}
+            <form className="mobile-drawer-search" onSubmit={handleNavSearch} role="search">
+              <Search className="mobile-search-icon" />
+              <input
+                type="search"
+                placeholder="Search campus marketplace..."
+                value={navSearch}
+                onChange={(e) => setNavSearch(e.target.value)}
+                className="mobile-search-input"
+                aria-label="Search campus marketplace"
+              />
+              {navSearch && (
+                <button
+                  type="button"
+                  className="mobile-search-clear"
+                  onClick={() => setNavSearch('')}
+                  aria-label="Clear search"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+            </form>
 
             {/* Primary Action Button */}
             <div className="mobile-drawer-cta">
@@ -399,7 +463,7 @@ export default function Navbar() {
                 </button>
               )}
               <div className="mobile-drawer-campus-tag">
-                Lincoln University College · Safe Campus P2P
+                Nasarawa State University Keffi · Safe Campus P2P
               </div>
             </div>
           </aside>
