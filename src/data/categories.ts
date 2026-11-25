@@ -20,7 +20,7 @@ export const categories: Category[] = [
     label: 'Clothing',
     icon: 'icon-shirt',
     tagline: 'Campus Fashion',
-    image: 'https://images.unsplash.com/photo-1509967419530-da38b4704bc6?w=700&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1576995853123-5a10305d93c0?w=700&auto=format&fit=crop&q=80',
   },
   {
     id: 'furniture',

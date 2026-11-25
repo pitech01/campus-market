@@ -2,9 +2,9 @@ import Icon from './Icon'
 
 const SERVICES = [
   { icon: 'icon-truck', title: 'Free Campus Pickup', sub: 'Meet at your block' },
-  { icon: 'icon-headset', title: 'Verified Sellers', sub: 'NSUK student ID only' },
+  { icon: 'icon-headset', title: 'Verified Sellers', sub: 'Lincoln student ID only' },
   { icon: 'icon-refresh-cw', title: 'Fair Meetup Guarantee', sub: 'Inspect before you pay' },
-  { icon: 'icon-gift', title: 'Zero Listing Fees', sub: 'Keep 100% of your sale' },
+  { icon: 'icon-gift', title: '80% Seller Payouts', sub: '20% platform escrow fee' },
 ]
 
 export default function ServiceBadges() {

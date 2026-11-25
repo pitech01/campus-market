@@ -8,21 +8,21 @@ export default function Footer() {
       <div className="footer-inner">
         {/* Brand & Mission Column */}
         <div className="footer-brand-column">
-          <Link className="brand" to="/" aria-label="Lincoln NSUK Campus Market Home">
+          <Link className="brand" to="/" aria-label="Lincoln Nasarawa Campus Market Home">
             <div className="brand-badge" style={{ background: '#ffffff', padding: 2, border: '1.5px solid rgba(220, 38, 38, 0.4)' }}>
-              <img src="/images/lincoln-nsuk-logo.png" alt="Lincoln NSUK Crest" style={{ width: 28, height: 28, objectFit: 'contain' }} />
+              <img src="/images/lincoln-nsuk-logo.png" alt="Lincoln Nasarawa Crest" style={{ width: 28, height: 28, objectFit: 'contain' }} />
             </div>
             <div className="brand-text-group">
               <span className="brand-name">Campus Market</span>
-              <span className="brand-campus-pill">Keffi</span>
+              <span className="brand-campus-pill">Nasarawa</span>
             </div>
           </Link>
           <p className="footer-desc">
-            The verified peer-to-peer student marketplace for Nasarawa State University Keffi (NSUK). Safely buy, sell, and exchange textbooks, electronics, and hostel essentials.
+            The verified peer-to-peer student marketplace for Lincoln University College, Nasarawa State. Safely buy, sell, and exchange textbooks, electronics, and hostel essentials.
           </p>
           <div className="footer-campus-badge">
             <ShieldCheck className="w-4 h-4 text-emerald-500 flex-shrink-0" />
-            <span>Official Student Project · Nasarawa State University Keffi</span>
+            <span>Official Student Project · Lincoln University College, Nasarawa State</span>
           </div>
           <div className="footer-social-row">
             <a href="https://facebook.com" target="_blank" rel="noreferrer" className="footer-social-btn" aria-label="Facebook">
@@ -64,7 +64,7 @@ export default function Footer() {
           <div className="footer-column">
             <h4>Get In Touch</h4>
             <ul>
-              <li><Link to="/#top">About NSUK Marketplace</Link></li>
+              <li><Link to="/#top">About Lincoln Marketplace</Link></li>
               <li><Link to="/register">Join as a Student</Link></li>
               <li><Link to="/login">Student Log In</Link></li>
               <li><a href="mailto:info@nussy.rabanigeo.com" className="inline-flex items-center gap-1"><Mail className="w-3.5 h-3.5 inline text-red-500" /> Support Desk</a></li>
@@ -77,9 +77,9 @@ export default function Footer() {
       <div className="footer-bottom">
         <div className="footer-bottom-inner">
           <p className="footer-copyright">
-            <span>© {new Date().getFullYear()} NSUK Campus Market. Built with</span>
+            <span>© {new Date().getFullYear()} Lincoln Campus Market. Built with</span>
             <Heart className="w-3.5 h-3.5 text-red-500 fill-red-500 inline mx-1 flex-shrink-0" />
-            <span>for NSUK Student Community.</span>
+            <span>for Lincoln Nasarawa Student Community.</span>
           </p>
           <div className="footer-badges">
             <span className="footer-secure-pill">

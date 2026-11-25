@@ -242,7 +242,7 @@ export default function HomePage() {
     const locSet = new Set<string>()
     const source = liveListings.length > 0 ? liveListings : mockListings
     source.forEach((item) => {
-      const locStr = item.meeting_location?.name || item.location || 'NSUK Campus, Keffi'
+      const locStr = item.meeting_location?.name || item.location || 'Lincoln Campus, Nasarawa'
       const primaryLoc = locStr.split('/')[0].trim()
       if (primaryLoc) locSet.add(primaryLoc)
     })
@@ -350,9 +350,9 @@ export default function HomePage() {
       <section className="cta-banner">
         <div className="cta-banner-inner">
           <div className="cta-content">
-            <span className="cta-pill">NSUK Student Exclusives</span>
+            <span className="cta-pill">Lincoln Student Exclusives</span>
             <h2>Got textbooks or dorm gear sitting idle?</h2>
-            <p>List it on Nussy in under 60 seconds — keep 100% of your earnings with zero fees.</p>
+            <p>List it on Nussy in under 60 seconds — earn 80% per sale directly into your seller wallet.</p>
           </div>
           <Link to="/listings/new" className="btn btn-cta">
             <Icon name="icon-plus" />

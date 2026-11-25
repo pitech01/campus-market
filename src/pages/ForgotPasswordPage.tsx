@@ -37,10 +37,10 @@ export const ForgotPasswordPage: React.FC = () => {
         <div className="login-inspo-brand">
           <div className="flex items-center gap-2.5">
             <Link to="/" className="brand-logo-link flex items-center gap-2">
-              <img src="/images/lincoln-nsuk-logo.png" alt="Lincoln NSUK Logo" className="w-7 h-7 object-contain inline-block" />
+              <img src="/images/lincoln-nsuk-logo.png" alt="Lincoln Nasarawa Logo" className="w-7 h-7 object-contain inline-block" />
               <span className="brand-title">CampusMarket</span>
             </Link>
-            <span className="brand-sub-badge hidden sm:inline-flex">Lincoln NSUK Verified</span>
+            <span className="brand-sub-badge hidden sm:inline-flex">Lincoln Nasarawa Verified</span>
           </div>
 
           <Link to="/" className="brand-back-btn" aria-label="Back to website">
@@ -143,7 +143,7 @@ export const ForgotPasswordPage: React.FC = () => {
           <div className="inspo-art-card">
             <img
               src="/images/auth-illustration.jpg"
-              alt="Nasarawa State University Keffi Student Marketplace Illustration"
+              alt="Lincoln University College, Nasarawa State Student Marketplace Illustration"
               className="inspo-art-image"
             />
           </div>
@@ -151,7 +151,7 @@ export const ForgotPasswordPage: React.FC = () => {
           <div className="inspo-trust-caption">
             <div className="trust-badge-pill">
               <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Nasarawa State University Keffi Official Campus Marketplace</span>
+              <span>Lincoln University College, Nasarawa State Official Campus Marketplace</span>
             </div>
             <p>Institutional student identity security & encrypted campus account authentication.</p>
           </div>

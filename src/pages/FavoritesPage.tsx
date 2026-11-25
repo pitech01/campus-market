@@ -47,7 +47,7 @@ export default function FavoritesPage() {
           Your Saved Campus Listings
         </h2>
         <p className="text-slate-500 text-sm mb-6">
-          Log in with your NSUK student account to keep track of items you wish to buy or exchange later.
+          Log in with your Lincoln Nasarawa student account to keep track of items you wish to buy or exchange later.
         </p>
         <Link
           to="/login"
@@ -172,7 +172,7 @@ export default function FavoritesPage() {
                     </h3>
                     <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-1 mb-2 inline-flex items-center gap-1">
                       <MapPin className="w-3.5 h-3.5 text-slate-400" />
-                      <span>{listing.meeting_location?.name || 'NSUK Campus, Keffi'}</span>
+                      <span>{listing.meeting_location?.name || 'Lincoln Campus, Nasarawa'}</span>
                     </p>
                   </div>
 

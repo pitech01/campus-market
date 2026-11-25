@@ -105,13 +105,13 @@ export default function ListingDetailPage() {
     (user && (Number(listing.seller_id) === Number(user.id) || Number((listing as any).seller?.id) === Number(user.id))) ||
     listing.sellerName === 'You'
 
-  const sellerName = (listing as any).seller?.name || listing.sellerName || 'NSUK Student'
+  const sellerName = (listing as any).seller?.name || listing.sellerName || 'Lincoln Student'
   const sellerInitial = (listing as any).seller?.name?.charAt(0) || listing.sellerInitial || 'S'
   const rawSellerAvatar = (listing as any).seller?.avatar_url || listing.sellerAvatar
   const sellerAvatar = rawSellerAvatar ? resolveImageUrl(rawSellerAvatar, '') : null
   const sellerRating = (listing as any).seller?.average_rating || listing.sellerRating || 5.0
   const sellerReviews = (listing as any).seller?.reviews_count || listing.sellerReviewsCount || 0
-  const meetingSpotName = listing.meeting_location?.name || listing.location || 'NSUK Central Library / Senate Building Foyer'
+  const meetingSpotName = listing.meeting_location?.name || listing.location || 'Lincoln Central Library & Senate Foyer'
 
   const handleFavoriteToggle = async () => {
     if (!isAuthenticated) {
@@ -344,8 +344,8 @@ export default function ListingDetailPage() {
               <div className="seller-card-info">
                 <div className="seller-name-row">
                   <h4>{sellerName}</h4>
-                  <span className="verified-student-pill inline-flex items-center gap-1" title="Verified Nasarawa State University Keffi Student">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> Verified NSUK Student
+                  <span className="verified-student-pill inline-flex items-center gap-1" title="Verified Lincoln University College, Nasarawa State Student">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> Verified Lincoln Student
                   </span>
                 </div>
                 <div className="seller-stats-line">

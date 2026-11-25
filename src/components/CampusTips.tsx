@@ -5,25 +5,25 @@ const TIPS = [
     date: 'Aug 12',
     title: 'How to Price Your Used Textbooks Fairly',
     excerpt: 'A quick guide to pricing notes and course books so they actually sell.',
-    image: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=500&auto=format&fit=crop&q=80',
+    image: '/images/nigerian-campus-tip-1.jpg',
   },
   {
     date: 'Aug 05',
     title: 'Meeting Up Safely on Campus',
-    excerpt: 'Best spots on NSUK Keffi campus to hand off items and what to check before you pay.',
-    image: '/images/nsuk-gate-1.jpg',
+    excerpt: 'Best spots on Lincoln Nasarawa campus to hand off items and what to check before you pay.',
+    image: '/images/nigerian-ecom-hero-1.jpg',
   },
   {
     date: 'Jul 28',
     title: '5 Things Every Freshman Should Buy Used',
     excerpt: 'Save money in your first semester by trading with students who just graduated.',
-    image: '/images/nsuk-senate-building.jpg',
+    image: '/images/nigerian-ecom-hero-2.jpg',
   },
   {
     date: 'Jul 15',
     title: 'Why Verified Trading Beats Random Group Chats',
     excerpt: 'The risks of untraceable sellers, and how student ID verification fixes that.',
-    image: '/images/nsuk-official-hero-2.jpg',
+    image: '/images/nigerian-ecom-hero-3.jpg',
   },
 ]
 

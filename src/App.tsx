@@ -8,6 +8,7 @@ import ResetPasswordPage from './pages/ResetPasswordPage'
 import ListingDetailPage from './pages/ListingDetailPage'
 import ListingFormPage from './pages/ListingFormPage'
 import ProfilePage from './pages/ProfilePage'
+import WalletPage from './pages/WalletPage'
 import MyDealsPage from './pages/MyDealsPage'
 import FavoritesPage from './pages/FavoritesPage'
 import AdminDashboardPage from './pages/AdminDashboardPage'
@@ -29,6 +30,7 @@ function App() {
       <Route element={<Layout />}>
         <Route index element={<HomePage />} />
         <Route path="profile" element={<ProfilePage />} />
+        <Route path="wallet" element={<WalletPage />} />
         <Route path="deals" element={<MyDealsPage />} />
         <Route path="favorites" element={<FavoritesPage />} />
         <Route path="listings/new" element={<ListingFormPage />} />

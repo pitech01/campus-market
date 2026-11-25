@@ -215,19 +215,106 @@ export interface AdminStats {
     completed_deals: number
     open_reports: number
     total_reports: number
+    escrow_held?: number
+    escrow_released?: number
+    cash_sales_total?: number
+    total_sales_volume?: number
+    gross_sales_volume?: number
+    commission_rate?: number
+    admin_commission_total?: number
+    escrow_commission_earned?: number
+    pending_escrow_commission?: number
+    cash_commission_total?: number
+    total_withdrawn?: number
+    pending_withdrawals_count?: number
+    pending_withdrawals_amount?: number
   }
   categories: {
+    id?: number
     name: string
     slug: string
+    description?: string
+    icon?: string
     listings_count: number
   }[]
-  recent_audit_logs: {
-    id: number
-    action: string
-    target_type?: string
-    target_id?: number
-    meta?: any
-    created_at: string
-    actor?: AuthUser
-  }[]
+  recent_listings?: Listing[]
+  recent_audit_logs: AuditLogItem[]
+}
+
+export interface AuditLogItem {
+  id: number
+  action: string
+  target_type?: string
+  target_id?: number
+  meta?: any
+  created_at: string
+  actor?: AuthUser
+}
+
+export interface WalletSummary {
+  id: number
+  user_id: number
+  available_balance: number
+  pending_balance: number
+  total_earned: number
+  cash_sales_total: number
+  total_made: number
+  total_gross_sales?: number
+  total_platform_fees?: number
+  commission_rate?: number
+  seller_share_rate?: number
+  total_withdrawn: number
+  pending_withdrawals_total: number
+  total_spent_as_buyer: number
+  completed_sales_count: number
+  escrow_sales_count: number
+  cash_sales_count: number
+  pending_escrow_count: number
+  bank_name?: string | null
+  account_number?: string | null
+  account_name?: string | null
+  currency: string
+}
+
+export interface WalletTransaction {
+  id: number
+  wallet_id: number
+  user_id: number
+  deal_id?: number | null
+  payment_id?: number | null
+  listing_id?: number | null
+  counterparty_id?: number | null
+  type: 'escrow_hold' | 'escrow_release' | 'escrow_refund' | 'cash_sale' | 'withdrawal' | string
+  direction: 'credit' | 'debit' | 'hold' | string
+  payment_method: 'paystack_escrow' | 'cash_meetup' | 'bank_transfer' | string
+  gross_amount: number | string
+  fee_amount: number | string
+  net_amount: number | string
+  status: 'pending' | 'completed' | 'cancelled' | 'failed' | string
+  reference: string
+  description: string
+  meta?: any
+  created_at: string
+  listing?: Listing | null
+  counterparty?: AuthUser | null
+  deal?: Deal | null
+}
+
+export interface WithdrawalRequest {
+  id: number
+  wallet_id: number
+  user_id: number
+  wallet_transaction_id?: number | null
+  amount: number | string
+  bank_name: string
+  account_number: string
+  account_name: string
+  reference: string
+  status: 'pending' | 'paid' | 'rejected' | string
+  admin_note?: string | null
+  processed_by?: number | null
+  processed_at?: string | null
+  created_at: string
+  user?: AuthUser | null
+  processor?: AuthUser | null
 }

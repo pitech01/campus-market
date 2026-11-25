@@ -19,22 +19,22 @@ const TRENDING_TAGS = [
 
 const HERO_SLIDES = [
   {
-    eyebrow: 'NSUK Student Exclusives',
+    eyebrow: 'Lincoln Nasarawa Exclusives',
     title: 'Buy, Sell & Swap on Campus.',
-    highlight: 'Zero Fees.',
-    image: '/images/nsuk-gate-hd.jpg',
+    highlight: 'Verified Escrow.',
+    image: '/images/nigerian-ecom-hero-1.jpg',
   },
   {
-    eyebrow: 'NSUK Senate & Safe Meetups',
+    eyebrow: 'Lincoln Senate & Safe Meetups',
     title: 'Safe Handover Meetup Spots.',
-    highlight: 'Across Keffi Campus.',
-    image: '/images/nsuk-senate-building.jpg',
+    highlight: 'Across Nasarawa Campus.',
+    image: '/images/nigerian-ecom-hero-2.jpg',
   },
   {
-    eyebrow: 'NSUK Official Marketplace',
+    eyebrow: 'Lincoln Official Marketplace',
     title: 'Connect with Coursemates.',
     highlight: 'In Minutes.',
-    image: '/images/nsuk-official-hero-1.jpg',
+    image: '/images/nigerian-ecom-hero-3.jpg',
   },
 ]
 
@@ -59,8 +59,8 @@ export default function Hero({ query, onQueryChange, onTrendingClick, onSearchSu
           </h1>
 
           <p className="hero-sub">
-            The verified marketplace for Nasarawa State University Keffi (NSUK) students. Grab textbooks, dorm gear, electronics
-            and fashion from coursemates next door — meet up safely at Angwan Lambu, Central Library, or Main Gate in minutes.
+            The verified marketplace for Lincoln University College, Nasarawa State students. Grab textbooks, dorm gear, electronics
+            and fashion from coursemates next door — meet up safely at Central Library, Main Gate, or Student Hostel Courtyard in minutes.
           </p>
 
           <form
@@ -163,14 +163,14 @@ export default function Hero({ query, onQueryChange, onTrendingClick, onSearchSu
           <Icon name="icon-shield" className="hero-stat-icon text-primary" />
           <div className="hero-stat-text">
             <strong>Verified Students</strong>
-            <span>NSUK Student ID check</span>
+            <span>Lincoln Student ID check</span>
           </div>
         </div>
         <div className="hero-stat-card">
           <Icon name="icon-tag" className="hero-stat-icon text-primary" />
           <div className="hero-stat-text">
-            <strong>0% Platform Commission</strong>
-            <span>Direct peer-to-peer deals</span>
+            <strong>80/20 Escrow Split</strong>
+            <span>80% seller · 20% platform</span>
           </div>
         </div>
         <div className="hero-stat-card">

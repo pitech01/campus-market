@@ -70,10 +70,10 @@ export default function RegisterPage() {
         <div className="login-inspo-brand">
           <div className="flex items-center gap-2.5">
             <Link to="/" className="brand-logo-link flex items-center gap-2">
-              <img src="/images/lincoln-nsuk-logo.png" alt="Lincoln NSUK Logo" className="w-7 h-7 object-contain inline-block" />
+              <img src="/images/lincoln-nsuk-logo.png" alt="Lincoln Nasarawa Logo" className="w-7 h-7 object-contain inline-block" />
               <span className="brand-title">CampusMarket</span>
             </Link>
-            <span className="brand-sub-badge hidden sm:inline-flex">Lincoln NSUK Verified</span>
+            <span className="brand-sub-badge hidden sm:inline-flex">Lincoln Nasarawa Verified</span>
           </div>
 
           <Link to="/" className="brand-back-btn" aria-label="Back to website">
@@ -86,7 +86,7 @@ export default function RegisterPage() {
         <div className="login-inspo-form-wrapper" style={{ maxWidth: 460 }}>
           <div className="login-inspo-header">
             <h1 className="login-inspo-title">Create account</h1>
-            <p className="login-inspo-subtitle">Enter your details to register on NSUK Campus Market</p>
+            <p className="login-inspo-subtitle">Enter your details to register on Lincoln Nasarawa Campus Market</p>
           </div>
 
           {/* Account Role / Intent Selector */}
@@ -192,7 +192,7 @@ export default function RegisterPage() {
                 id="reg-student-id"
                 type="text"
                 className="inspo-input"
-                placeholder="e.g. NSUK/NAS/2023/1042"
+                placeholder="e.g. LUC/NAS/2023/1042"
                 required
                 value={form.student_id}
                 onChange={updateField('student_id')}
@@ -289,7 +289,7 @@ export default function RegisterPage() {
           <div className="inspo-art-card">
             <img
               src="/images/auth-illustration.jpg"
-              alt="Nasarawa State University Keffi Student Marketplace Illustration"
+              alt="Lincoln University College, Nasarawa State Student Marketplace Illustration"
               className="inspo-art-image"
             />
           </div>
@@ -297,9 +297,9 @@ export default function RegisterPage() {
           <div className="inspo-trust-caption">
             <div className="trust-badge-pill">
               <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Nasarawa State University Keffi Official Campus Marketplace</span>
+              <span>Lincoln University College, Nasarawa State Official Campus Marketplace</span>
             </div>
-            <p>Join thousands of verified NSUK students buying, selling, and swapping securely.</p>
+            <p>Join thousands of verified Lincoln Nasarawa students buying, selling, and swapping securely.</p>
           </div>
         </div>
       </div>

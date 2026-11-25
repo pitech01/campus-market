@@ -32,7 +32,7 @@ export default function ListingCard({ listing }: { listing: Listing }) {
   const sellerInitial = (listing as any).seller?.name?.charAt(0) || listing.sellerInitial || 'S'
   const rawSellerAvatar = (listing as any).seller?.avatar_url || listing.sellerAvatar
   const sellerAvatar = rawSellerAvatar ? resolveImageUrl(rawSellerAvatar, '') : null
-  const locationText = listing.meeting_location?.name || listing.location || 'NSUK Campus, Keffi'
+  const locationText = listing.meeting_location?.name || listing.location || 'Lincoln Campus, Nasarawa'
 
   return (
     <article className={`listing-card ${listing.status === 'sold' ? 'is-sold' : ''}`}>

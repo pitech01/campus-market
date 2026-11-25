@@ -8,6 +8,9 @@ import type {
   Review,
   AuthUser,
   Payment,
+  WalletSummary,
+  WalletTransaction,
+  WithdrawalRequest,
 } from '../types'
 
 export const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api'
@@ -533,5 +536,198 @@ export async function updateAdminLocation(locationId: number | string, payload: 
 export function getExportUrl(type: 'users' | 'listings' | 'deals'): string {
   const token = localStorage.getItem('nussy_auth_token')
   return `${API_BASE}/admin/export/${type}?token=${token || ''}`
+}
+
+async function downloadAuthenticatedCsv(endpoint: string, fallbackFilename: string): Promise<void> {
+  const token = localStorage.getItem('nussy_auth_token')
+  const res = await fetch(`${API_BASE}${endpoint}`, {
+    headers: {
+      Accept: 'text/csv, application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+  })
+
+  if (!res.ok) {
+    let msg = `Export failed (${res.status})`
+    try {
+      const err = await res.json()
+      if (err.message) msg = err.message
+    } catch {
+      // ignore
+    }
+    throw new Error(msg)
+  }
+
+  const blob = await res.blob()
+  const url = window.URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = fallbackFilename
+  document.body.appendChild(a)
+  a.click()
+  a.remove()
+  window.URL.revokeObjectURL(url)
+}
+
+export async function downloadAdminExport(type: 'users' | 'listings' | 'deals'): Promise<void> {
+  return downloadAuthenticatedCsv(
+    `/admin/export/${type}`,
+    `lincoln_campus_${type}_${new Date().toISOString().slice(0, 10)}.csv`
+  )
+}
+
+export async function getAdminListings(params: { q?: string; status?: string; category_id?: string | number; page?: number } = {}): Promise<any> {
+  const searchParams = new URLSearchParams()
+  if (params.q) searchParams.append('q', params.q)
+  if (params.status && params.status !== 'all') searchParams.append('status', params.status)
+  if (params.category_id && params.category_id !== 'all') searchParams.append('category_id', String(params.category_id))
+  if (params.page) searchParams.append('page', String(params.page))
+
+  const qs = searchParams.toString()
+  return request<any>(`/admin/listings${qs ? `?${qs}` : ''}`)
+}
+
+export async function updateAdminListing(listingId: number | string, status: string): Promise<any> {
+  return request<any>(`/admin/listings/${listingId}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ status }),
+  })
+}
+
+export async function deleteAdminListing(listingId: number | string): Promise<any> {
+  return request<any>(`/admin/listings/${listingId}`, {
+    method: 'DELETE',
+  })
+}
+
+export async function seedAdminDemoListings(): Promise<{
+  message: string
+  created_count: number
+  total_listings: number
+}> {
+  return request<{ message: string; created_count: number; total_listings: number }>(
+    '/admin/seed-demo-listings',
+    { method: 'POST' }
+  )
+}
+
+export async function getAdminDeals(params: { q?: string; status?: string; payment_status?: string; page?: number } = {}): Promise<any> {
+  const searchParams = new URLSearchParams()
+  if (params.q) searchParams.append('q', params.q)
+  if (params.status && params.status !== 'all') searchParams.append('status', params.status)
+  if (params.payment_status && params.payment_status !== 'all') searchParams.append('payment_status', params.payment_status)
+  if (params.page) searchParams.append('page', String(params.page))
+
+  const qs = searchParams.toString()
+  return request<any>(`/admin/deals${qs ? `?${qs}` : ''}`)
+}
+
+export async function getAdminFinance(params: { withdrawal_status?: string; page?: number } = {}): Promise<any> {
+  const searchParams = new URLSearchParams()
+  if (params.withdrawal_status && params.withdrawal_status !== 'all') {
+    searchParams.append('withdrawal_status', params.withdrawal_status)
+  }
+  if (params.page) searchParams.append('page', String(params.page))
+
+  const qs = searchParams.toString()
+  return request<any>(`/admin/finance${qs ? `?${qs}` : ''}`)
+}
+
+export async function processAdminWithdrawal(
+  withdrawalId: number | string,
+  payload: { status: 'paid' | 'rejected'; admin_note?: string }
+): Promise<any> {
+  return request<any>(`/admin/withdrawals/${withdrawalId}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  })
+}
+
+export async function getAdminAuditLogs(params: { q?: string; action?: string; page?: number } = {}): Promise<any> {
+  const searchParams = new URLSearchParams()
+  if (params.q) searchParams.append('q', params.q)
+  if (params.action && params.action !== 'all') searchParams.append('action', params.action)
+  if (params.page) searchParams.append('page', String(params.page))
+
+  const qs = searchParams.toString()
+  return request<any>(`/admin/audit-logs${qs ? `?${qs}` : ''}`)
+}
+
+export async function deleteAdminCategory(categoryId: number | string): Promise<any> {
+  return request<any>(`/admin/categories/${categoryId}`, {
+    method: 'DELETE',
+  })
+}
+
+export async function deleteAdminLocation(locationId: number | string): Promise<any> {
+  return request<any>(`/admin/locations/${locationId}`, {
+    method: 'DELETE',
+  })
+}
+
+// =================== Seller Wallet & Financial Records ===================
+export async function getWallet(): Promise<WalletSummary> {
+  const data = await request<{ wallet: WalletSummary }>('/wallet')
+  return data.wallet
+}
+
+export async function getWalletTransactions(params: {
+  type?: string
+  status?: string
+  q?: string
+  page?: number
+  per_page?: number
+} = {}): Promise<{ data: WalletTransaction[]; current_page?: number; last_page?: number; total?: number }> {
+  const searchParams = new URLSearchParams()
+  if (params.type && params.type !== 'all') searchParams.append('type', params.type)
+  if (params.status && params.status !== 'all') searchParams.append('status', params.status)
+  if (params.q) searchParams.append('q', params.q)
+  if (params.page) searchParams.append('page', String(params.page))
+  if (params.per_page) searchParams.append('per_page', String(params.per_page))
+
+  const qs = searchParams.toString()
+  return request<{ data: WalletTransaction[]; current_page?: number; last_page?: number; total?: number }>(
+    `/wallet/transactions${qs ? `?${qs}` : ''}`
+  )
+}
+
+export async function getWalletWithdrawals(page = 1): Promise<{ data: WithdrawalRequest[]; current_page?: number; last_page?: number; total?: number }> {
+  return request<{ data: WithdrawalRequest[]; current_page?: number; last_page?: number; total?: number }>(
+    `/wallet/withdrawals?page=${page}`
+  )
+}
+
+export async function updateWalletBankDetails(payload: {
+  bank_name: string
+  account_number: string
+  account_name: string
+}): Promise<{ message: string; wallet: any }> {
+  return request<{ message: string; wallet: any }>('/wallet/bank-details', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  })
+}
+
+export async function requestWalletWithdrawal(payload: {
+  amount: number
+  bank_name?: string
+  account_number?: string
+  account_name?: string
+}): Promise<{ message: string; withdrawal: WithdrawalRequest }> {
+  return request<{ message: string; withdrawal: WithdrawalRequest }>('/wallet/withdraw', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  })
+}
+
+export async function downloadWalletExport(): Promise<void> {
+  return downloadAuthenticatedCsv(
+    '/wallet/export',
+    `lincoln_seller_financial_records_${new Date().toISOString().slice(0, 10)}.csv`
+  )
 }
 

@@ -161,7 +161,7 @@ export default function MyDealsPage() {
           Campus Deals & Exchanges
         </h2>
         <p className="text-slate-500 text-sm mb-6">
-          Please log in with your Nasarawa State University Keffi (NSUK) student account to manage your ongoing trade agreements.
+          Please log in with your Lincoln University College, Nasarawa State student account to manage your ongoing trade agreements.
         </p>
         <Link
           to="/login"
@@ -188,21 +188,29 @@ export default function MyDealsPage() {
           </p>
         </div>
 
-        {/* Tabs */}
-        <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
-          {(['ongoing', 'completed', 'all'] as const).map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`px-4 py-1.5 rounded-lg text-xs font-bold capitalize transition ${
-                activeTab === tab
-                  ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs'
-                  : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
-              }`}
-            >
-              {tab} Deals
-            </button>
-          ))}
+        {/* Tabs & Quick Wallet Link */}
+        <div className="flex flex-wrap items-center gap-2">
+          <Link
+            to="/wallet"
+            className="px-3.5 py-1.5 rounded-xl bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 text-xs font-bold transition"
+          >
+            Seller Wallet &amp; Earnings →
+          </Link>
+          <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
+            {(['ongoing', 'completed', 'all'] as const).map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`px-4 py-1.5 rounded-lg text-xs font-bold capitalize transition ${
+                  activeTab === tab
+                    ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs'
+                    : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
+                }`}
+              >
+                {tab} Deals
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -451,7 +459,7 @@ export default function MyDealsPage() {
               <span>Rate & Review Student</span>
             </h3>
             <p className="text-xs text-slate-500 mb-4">
-              Share your exchange experience to keep NSUK Campus Marketplace trusted and safe.
+              Share your exchange experience to keep Lincoln Campus Marketplace trusted and safe.
             </p>
 
             <form onSubmit={handleReviewSubmit} className="space-y-4">

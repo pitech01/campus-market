@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  /* Brand colors — NSUK Crimson & Variants of Red */
+  /* Brand colors — Lincoln Nasarawa Crimson & Variants of Red */
   --primary: #dc2626; /* Crimson Red */
   --primary-hover: #b91c1c; /* Deep Crimson */
   --primary-active: #991b1b; /* Dark Ruby Red */

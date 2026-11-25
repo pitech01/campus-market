@@ -150,7 +150,7 @@ export default function ListingFormPage() {
       <div className="max-w-md mx-auto my-16 p-8 bg-white dark:bg-slate-800 rounded-2xl border text-center">
         <h2 className="text-xl font-bold mb-2">Sign in to Post an Item</h2>
         <p className="text-xs text-slate-500 mb-6">
-          Only verified Nasarawa State University Keffi (NSUK) students can post items for sale or exchange.
+          Only verified Lincoln University College, Nasarawa State students can post items for sale or exchange.
         </p>
         <Link
           to="/login"
@@ -173,7 +173,7 @@ export default function ListingFormPage() {
         <div className="form-layout-card">
           <div className="form-header-area">
             <span className="form-eyebrow">
-              {isEdit ? 'Update Listing' : 'Student Marketplace (NSUK)'}
+              {isEdit ? 'Update Listing' : 'Student Marketplace (Lincoln Nasarawa)'}
             </span>
             <h1>{isEdit ? 'Edit listing details' : 'Post an Item for Sale or Exchange'}</h1>
             <p className="form-subtext">
@@ -361,7 +361,7 @@ export default function ListingFormPage() {
                 <label className="field-label flex items-center gap-1.5">
                   <MapPin className="w-3.5 h-3.5 text-emerald-600" />
                   <span>Preferred Safe Campus Meet-up Spot</span>
-                  <span className="field-hint">Public, well-lit NSUK campus areas</span>
+                  <span className="field-hint">Public, well-lit Lincoln Nasarawa campus areas</span>
                 </label>
                 <select
                   className="input-control select-control"
@@ -404,7 +404,7 @@ export default function ListingFormPage() {
                       ? 'Publishing...'
                       : isEdit
                       ? 'Save Listing Changes'
-                      : 'Publish to NSUK Marketplace'}
+                      : 'Publish to Lincoln Marketplace'}
                   </span>
                 </button>
               </div>

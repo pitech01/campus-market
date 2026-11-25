@@ -60,7 +60,7 @@ export const myListings: Listing[] = [
     category: 'other',
     status: 'sold',
     condition: 'Good Condition',
-    location: 'NSUK Central Library / Senate Building Foyer',
+    location: 'Lincoln Central Library & Senate Foyer',
     postedAt: '1 week ago',
     sellerName: 'You',
     sellerInitial: 'Y',

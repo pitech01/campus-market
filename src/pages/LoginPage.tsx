@@ -45,10 +45,10 @@ export default function LoginPage() {
         <div className="login-inspo-brand">
           <div className="flex items-center gap-2.5">
             <Link to="/" className="brand-logo-link flex items-center gap-2">
-              <img src="/images/lincoln-nsuk-logo.png" alt="Lincoln NSUK Logo" className="w-7 h-7 object-contain inline-block" />
+              <img src="/images/lincoln-nsuk-logo.png" alt="Lincoln Nasarawa Logo" className="w-7 h-7 object-contain inline-block" />
               <span className="brand-title">CampusMarket</span>
             </Link>
-            <span className="brand-sub-badge hidden sm:inline-flex">Lincoln NSUK Verified</span>
+            <span className="brand-sub-badge hidden sm:inline-flex">Lincoln Nasarawa Verified</span>
           </div>
 
           <Link to="/" className="brand-back-btn" aria-label="Back to website">
@@ -61,7 +61,7 @@ export default function LoginPage() {
         <div className="login-inspo-form-wrapper">
           <div className="login-inspo-header">
             <h1 className="login-inspo-title">Welcome back</h1>
-            <p className="login-inspo-subtitle">Please enter your Lincoln NSUK student login details</p>
+            <p className="login-inspo-subtitle">Please enter your Lincoln Nasarawa student login details</p>
           </div>
 
           {errorMsg && (
@@ -138,7 +138,7 @@ export default function LoginPage() {
           {/* Mobile Campus Safety Note */}
           <div className="login-mobile-trust-note md:hidden">
             <ShieldCheck className="w-4 h-4 text-red-600 shrink-0" />
-            <span>Nasarawa State University Keffi Official Campus Marketplace</span>
+            <span>Lincoln University College, Nasarawa State Official Campus Marketplace</span>
           </div>
         </div>
       </div>
@@ -149,7 +149,7 @@ export default function LoginPage() {
           <div className="inspo-art-card">
             <img
               src="/images/auth-illustration.jpg"
-              alt="Nasarawa State University Keffi Student Marketplace Illustration"
+              alt="Lincoln University College, Nasarawa State Student Marketplace Illustration"
               className="inspo-art-image"
             />
           </div>
@@ -157,7 +157,7 @@ export default function LoginPage() {
           <div className="inspo-trust-caption">
             <div className="trust-badge-pill">
               <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Nasarawa State University Keffi Official Campus Marketplace</span>
+              <span>Lincoln University College, Nasarawa State Official Campus Marketplace</span>
             </div>
             <p>Buy, sell, and exchange verified student textbooks, tech, and hostel gear safely on campus.</p>
           </div>

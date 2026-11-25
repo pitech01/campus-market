@@ -27,7 +27,7 @@ export default function PaystackPaymentModal({
   const activeListing = deal?.listing || listing
   const finalAmount = customAmount ?? (deal?.agreed_price ? Number(deal.agreed_price) : Number(activeListing?.price || 0))
   const currencySymbol = activeListing?.currency === 'RM' ? 'RM' : '₦'
-  const meetingSpot = deal?.meeting_location?.name || activeListing?.location || 'NSUK Central Library / Senate Building Foyer'
+  const meetingSpot = deal?.meeting_location?.name || activeListing?.location || 'Lincoln Central Library & Senate Foyer'
 
   // If user is not signed in, show a dedicated, friendly authentication card
   if (!isAuthenticated) {
@@ -44,7 +44,7 @@ export default function PaystackPaymentModal({
               </div>
               <div>
                 <h3 className="paystack-modal-title text-white">Sign In Required</h3>
-                <span className="paystack-modal-subtitle text-red-100">NSUK Keffi Campus Escrow</span>
+                <span className="paystack-modal-subtitle text-red-100">Lincoln Nasarawa Campus Escrow</span>
               </div>
             </div>
             <button
@@ -66,7 +66,7 @@ export default function PaystackPaymentModal({
             <div>
               <h4 className="text-lg font-bold text-slate-900 dark:text-white">Sign in to Purchase</h4>
               <p className="text-sm text-slate-500 dark:text-slate-400 mt-1.5 leading-relaxed">
-                To guarantee 100% student escrow protection and secure meetups on campus, you must be signed in with your NSUK student account.
+                To guarantee 100% student escrow protection and secure meetups on campus, you must be signed in with your Lincoln Nasarawa student account.
               </p>
             </div>
 
@@ -104,55 +104,6 @@ export default function PaystackPaymentModal({
     setErrorMsg(null)
     setIsAuthError(false)
 
-    const publicKey =
-      import.meta.env.VITE_PAYSTACK_PUBLIC_KEY ||
-      'pk_test_1547bb10f90e5a418cc62e479fbbb4390abdbf70'
-
-    // Priority 1: Official Paystack Inline Popup (Direct in browser)
-    // Runs on the student's device and completely avoids any server IP / Cloudflare blocks!
-    if (typeof (window as any).PaystackPop !== 'undefined' && publicKey) {
-      try {
-        const reference = 'nussy_pstk_' + Math.random().toString(36).substring(2, 9) + '_' + Date.now()
-        const amountInKobo = Math.round(finalAmount * 100)
-
-        const handler = (window as any).PaystackPop.setup({
-          key: publicKey,
-          email: user?.email || 'student@lincoln.edu.ng',
-          amount: amountInKobo,
-          currency: activeListing?.currency === 'RM' ? 'MYR' : 'NGN',
-          ref: reference,
-          metadata: {
-            custom_fields: [
-              {
-                display_name: 'Campus Marketplace Item',
-                variable_name: 'item_title',
-                value: activeListing?.title || 'Campus Item',
-              },
-              {
-                display_name: 'Student Payer',
-                variable_name: 'student_name',
-                value: user?.name || 'Student',
-              },
-            ],
-          },
-          callback: function (response: any) {
-            // Escrow payment succeeded on Paystack!
-            const finalRef = response.reference || reference
-            window.location.href = `/deals?payment=success&reference=${finalRef}`
-          },
-          onClose: function () {
-            setLoading(false)
-          },
-        })
-
-        handler.openIframe()
-        return
-      } catch (inlineErr) {
-        console.warn('Paystack inline checkout error, falling back to server initialize:', inlineErr)
-      }
-    }
-
-    // Priority 2: Backend initialization fallback
     try {
       const callbackUrl = `${window.location.origin}/deals?payment=success`
       const res = await initializePayment({
@@ -163,13 +114,65 @@ export default function PaystackPaymentModal({
         callback_url: callbackUrl,
       })
 
-      if (res.authorization_url) {
-        // Redirect directly to Paystack hosted checkout
-        window.location.href = res.authorization_url
-      } else {
-        setErrorMsg('Paystack checkout URL was not generated. Please try again.')
-        setLoading(false)
+      const publicKey =
+        res.public_key ||
+        import.meta.env.VITE_PAYSTACK_PUBLIC_KEY ||
+        'pk_test_1547bb10f90e5a418cc62e479fbbb4390abdbf70'
+
+      // If running in simulated/pilot mode, verify immediately via /deals redirect
+      if (res.is_simulated) {
+        window.location.href = `/deals?payment=success&reference=${encodeURIComponent(res.reference)}`
+        return
       }
+
+      // Priority 1: Hosted Paystack checkout URL created by our backend for this exact reference
+      if (res.authorization_url) {
+        window.location.href = res.authorization_url
+        return
+      }
+
+      // Priority 2: Paystack Inline Popup fallback using server-registered reference
+      if (typeof (window as any).PaystackPop !== 'undefined' && publicKey) {
+        try {
+          const amountInKobo = Math.round(finalAmount * 100)
+          const handler = (window as any).PaystackPop.setup({
+            key: publicKey,
+            email: user?.email || 'student@lincoln.edu.ng',
+            amount: amountInKobo,
+            currency: activeListing?.currency === 'RM' ? 'MYR' : 'NGN',
+            ref: res.reference,
+            metadata: {
+              custom_fields: [
+                {
+                  display_name: 'Campus Marketplace Item',
+                  variable_name: 'item_title',
+                  value: activeListing?.title || 'Campus Item',
+                },
+                {
+                  display_name: 'Student Payer',
+                  variable_name: 'student_name',
+                  value: user?.name || 'Student',
+                },
+              ],
+            },
+            callback: function (response: any) {
+              const finalRef = response.reference || res.reference
+              window.location.href = `/deals?payment=success&reference=${encodeURIComponent(finalRef)}`
+            },
+            onClose: function () {
+              setLoading(false)
+            },
+          })
+
+          handler.openIframe()
+          return
+        } catch (inlineErr) {
+          console.warn('Paystack inline checkout error:', inlineErr)
+        }
+      }
+
+      setErrorMsg('Paystack checkout URL was not generated. Please try again.')
+      setLoading(false)
     } catch (err: any) {
       const msg = err.message || ''
       if (err.status === 401 || msg.toLowerCase().includes('unauthenticated')) {
@@ -193,7 +196,7 @@ export default function PaystackPaymentModal({
             </div>
             <div>
               <h3 className="paystack-modal-title">Paystack Campus Escrow</h3>
-              <span className="paystack-modal-subtitle">100% Buyer Protection · Nasarawa State University Keffi (NSUK)</span>
+              <span className="paystack-modal-subtitle">100% Buyer Protection · Lincoln University College, Nasarawa State</span>
             </div>
           </div>
           <button
@@ -248,7 +251,7 @@ export default function PaystackPaymentModal({
                 <div className="paystack-meta-row">
                   <span className="paystack-meta-pill">
                     <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                    <span>NSUK Verified Deal</span>
+                    <span>Lincoln Verified Deal</span>
                   </span>
                   <span className="paystack-meta-spot">{meetingSpot}</span>
                 </div>

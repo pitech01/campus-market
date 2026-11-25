@@ -99,7 +99,7 @@ export default function ChatDrawer({
 
   const quickPrompts = [
     '👋 Hi, is this item still available?',
-    '📍 Can we meet at NSUK Central Library / Senate Building foyer?',
+    '📍 Can we meet at Lincoln Central Library & Senate foyer?',
     '💰 Is the price negotiable for students?',
   ]
 
@@ -303,7 +303,7 @@ export default function ChatDrawer({
       await submitReview(reviewedDealId, reviewRating, reviewComment)
       setShowReviewModal(false)
       setReviewComment('')
-      alert('Review submitted! Thank you for helping keep NSUK Marketplace trusted.')
+      alert('Review submitted! Thank you for helping keep Lincoln Nasarawa Marketplace trusted.')
     } catch (err: any) {
       alert(err?.message || 'Failed to submit review.')
     } finally {
@@ -347,7 +347,7 @@ export default function ChatDrawer({
               </div>
               <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Student Sign-In Required</h4>
               <p className="text-sm text-slate-500 dark:text-slate-400 max-w-xs mx-auto mb-6">
-                To prevent spam and keep Nasarawa State University Keffi (NSUK) students safe, please sign in with your student account to message sellers and propose deals.
+                To prevent spam and keep Lincoln University College, Nasarawa State students safe, please sign in with your student account to message sellers and propose deals.
               </p>
               <div className="flex flex-col gap-3">
                 <a
@@ -366,7 +366,7 @@ export default function ChatDrawer({
             </div>
           </div>
           <div className="text-center text-xs text-slate-400 pb-2">
-            Nasarawa State University Keffi Marketplace · Peer to Peer Safety
+            Lincoln University College, Nasarawa State Marketplace · Peer to Peer Safety
           </div>
         </div>
       </div>
@@ -388,7 +388,7 @@ export default function ChatDrawer({
             </div>
             <div>
               <h2 className="font-bold text-base text-white">Campus Messenger & Deals</h2>
-              <p className="text-xs text-slate-400">Direct peer-to-peer student trading (NSUK Keffi)</p>
+              <p className="text-xs text-slate-400">Direct peer-to-peer student trading (Lincoln Nasarawa)</p>
             </div>
           </div>
           <button
@@ -487,12 +487,12 @@ export default function ChatDrawer({
                         {otherUser?.campus_verified && (
                           <span className="bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-900/60 text-[10px] font-semibold px-1.5 py-0.5 rounded inline-flex items-center gap-1">
                             <CheckCircle2 className="w-3 h-3 text-red-600 dark:text-red-400" />
-                            <span>NSUK Verified</span>
+                            <span>Lincoln Verified</span>
                           </span>
                         )}
                       </div>
                       <p className="text-[11px] text-slate-500 inline-flex items-center gap-1">
-                        <span>{otherUser?.faculty || 'NSUK Student'}</span>
+                        <span>{otherUser?.faculty || 'Lincoln Student'}</span>
                         <span>•</span>
                         <Star className="w-3 h-3 text-amber-500 fill-amber-400" />
                         <span>{otherUser?.average_rating || '5.0'}</span>
@@ -774,7 +774,7 @@ export default function ChatDrawer({
                 {isOffPlatformWarning && (
                   <div className="px-3 py-1.5 bg-amber-50 dark:bg-amber-950/60 border-t border-amber-200 dark:border-amber-900/60 text-[11px] text-amber-800 dark:text-amber-300 flex items-center gap-1.5">
                     <AlertTriangle className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-                    <span><strong>Safety Notice:</strong> To ensure verified campus handover and escrow protection, keep communication inside NSUK Campus Marketplace.</span>
+                    <span><strong>Safety Notice:</strong> To ensure verified campus handover and escrow protection, keep communication inside Lincoln Campus Marketplace.</span>
                   </div>
                 )}
 
@@ -954,7 +954,7 @@ export default function ChatDrawer({
               <span>Rate & Review Student</span>
             </h3>
             <p className="text-xs text-slate-500 mb-4">
-              How was your campus exchange experience? Your review helps keep NSUK Campus Marketplace safe.
+              How was your campus exchange experience? Your review helps keep Lincoln Campus Marketplace safe.
             </p>
 
             <form onSubmit={handleReviewSubmit} className="space-y-4">
@@ -1032,7 +1032,7 @@ export default function ChatDrawer({
           reportableId={otherUser.id}
           targetTitle={`User: ${otherUser.name}`}
           onReportSubmitted={() => {
-            setChatError('Report submitted to NSUK campus moderation team.')
+            setChatError('Report submitted to Lincoln campus moderation team.')
           }}
         />
       )}

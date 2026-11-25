@@ -14,7 +14,8 @@ import {
   LogOut,
   MapPin,
   Edit,
-  Check
+  Check,
+  Wallet
 } from 'lucide-react'
 import { categories } from '../data/categories'
 import { useAuth } from '../lib/authContext'
@@ -24,10 +25,12 @@ import {
   deleteListing,
   getFavorites,
   updateProfile,
+  getWallet,
   resolveImageUrl,
   DEFAULT_ITEM_PLACEHOLDER,
 } from '../lib/api'
-import type { Listing } from '../types'
+import SellerWalletPanel from '../components/SellerWalletPanel'
+import type { Listing, WalletSummary } from '../types'
 
 const categoryMap = Object.fromEntries(categories.map((c) => [c.id, c]))
 
@@ -36,12 +39,19 @@ export default function ProfilePage() {
   const { user, isAuthenticated, logout } = useAuth()
   const [searchParams, setSearchParams] = useSearchParams()
   const currentTab = searchParams.get('tab') || 'listings'
-  const [activeTab, setActiveTab] = useState<'listings' | 'saved' | 'settings'>(
-    currentTab === 'saved' ? 'saved' : currentTab === 'settings' ? 'settings' : 'listings'
+  const [activeTab, setActiveTab] = useState<'listings' | 'wallet' | 'saved' | 'settings'>(
+    currentTab === 'wallet'
+      ? 'wallet'
+      : currentTab === 'saved'
+      ? 'saved'
+      : currentTab === 'settings'
+      ? 'settings'
+      : 'listings'
   )
 
   const [listings, setListings] = useState<Listing[]>([])
   const [savedListings, setSavedListings] = useState<Listing[]>([])
+  const [walletSummary, setWalletSummary] = useState<WalletSummary | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
   // Profile edit fields
@@ -53,16 +63,22 @@ export default function ProfilePage() {
   const [profileSuccessMsg, setProfileSuccessMsg] = useState<string | null>(null)
 
   useEffect(() => {
-    if (searchParams.get('tab') === 'saved') {
+    const tabParam = searchParams.get('tab')
+    if (tabParam === 'wallet') {
+      setActiveTab('wallet')
+    } else if (tabParam === 'saved') {
       setActiveTab('saved')
-    } else if (searchParams.get('tab') === 'settings') {
+    } else if (tabParam === 'settings') {
       setActiveTab('settings')
+    } else if (tabParam === 'listings') {
+      setActiveTab('listings')
     }
   }, [searchParams])
 
   useEffect(() => {
     if (isAuthenticated) {
       loadData()
+      getWallet().then(setWalletSummary).catch(() => {})
     }
   }, [isAuthenticated, activeTab])
 
@@ -83,7 +99,7 @@ export default function ProfilePage() {
     }
   }
 
-  const handleTabChange = (tab: 'listings' | 'saved' | 'settings') => {
+  const handleTabChange = (tab: 'listings' | 'wallet' | 'saved' | 'settings') => {
     setActiveTab(tab)
     setSearchParams({ tab })
   }
@@ -137,7 +153,7 @@ export default function ProfilePage() {
   const soldCount = listings.length - activeCount
 
   const studentName = user?.name || 'Nusaiba Nussy Abdullahi'
-  const studentId = user?.student_id || 'NSUK/NAS/2023/1042'
+  const studentId = user?.student_id || 'LUC/NAS/2023/1042'
   const studentEmail = user?.email || 'nusaiba@lincoln.edu.ng'
 
   if (!isAuthenticated) {
@@ -195,6 +211,15 @@ export default function ProfilePage() {
               <span className="cred-pill inline-flex items-center gap-1.5">
                 <Handshake className="w-3.5 h-3.5 text-emerald-600" /> {user?.completed_deals_count || 0} Completed Deals
               </span>
+              {walletSummary && (
+                <button
+                  type="button"
+                  onClick={() => handleTabChange('wallet')}
+                  className="cred-pill inline-flex items-center gap-1.5 cursor-pointer hover:border-red-300"
+                >
+                  <Wallet className="w-3.5 h-3.5 text-red-600" /> Total Made: ₦{Number(walletSummary.total_made || 0).toLocaleString()}
+                </button>
+              )}
             </div>
           </div>
 
@@ -226,6 +251,18 @@ export default function ProfilePage() {
           <Tag className="w-4 h-4" />
           <span>My Listings</span>
           <span className="tab-badge-pill">{listings.length}</span>
+        </button>
+
+        <button
+          type="button"
+          className={`profile-tab-btn inline-flex items-center gap-2 ${activeTab === 'wallet' ? 'is-active' : ''}`}
+          onClick={() => handleTabChange('wallet')}
+        >
+          <Wallet className="w-4 h-4" />
+          <span>Seller Wallet &amp; Earnings</span>
+          {walletSummary && (
+            <span className="tab-badge-pill">₦{Number(walletSummary.available_balance || 0).toLocaleString()}</span>
+          )}
         </button>
 
         <button
@@ -308,7 +345,7 @@ export default function ProfilePage() {
 
                       <div className="profile-item-location inline-flex items-center gap-1.5">
                         <MapPin className="w-3.5 h-3.5 text-slate-500" />
-                        <span>{listing.meeting_location?.name || listing.location || 'NSUK Campus, Keffi'}</span>
+                        <span>{listing.meeting_location?.name || listing.location || 'Lincoln Campus, Nasarawa'}</span>
                       </div>
 
                       <div className="profile-item-actions">
@@ -354,6 +391,13 @@ export default function ProfilePage() {
               </Link>
             </div>
           )}
+        </div>
+      )}
+
+      {/* Tab Content: Seller Wallet & Financial Records */}
+      {activeTab === 'wallet' && (
+        <div className="profile-tab-content">
+          <SellerWalletPanel />
         </div>
       )}
 
@@ -446,7 +490,7 @@ export default function ProfilePage() {
                 type="text"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                placeholder="+60 11-XXXX XXXX"
+                placeholder="+234 803 XXX XXXX"
                 className="input-control"
               />
             </div>
@@ -477,7 +521,7 @@ export default function ProfilePage() {
           <div className="mt-6 bg-white dark:bg-slate-800 p-6 rounded-2xl border space-y-4">
             <div>
               <h4 className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-emerald-600" /> Privacy & PDPA Rights (Malaysia PDPA 2010)
+                <ShieldCheck className="w-4 h-4 text-emerald-600" /> Privacy &amp; Data Protection Rights (NDPR &amp; Campus Policy)
               </h4>
               <p className="text-xs text-slate-500 mt-1">
                 You have the full right to export a complete machine-readable copy of your personal data or request immediate account anonymization.

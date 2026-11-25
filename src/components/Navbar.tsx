@@ -16,6 +16,7 @@ import {
   Shield,
   ChevronRight,
   Search,
+  Wallet,
 } from 'lucide-react'
 import Icon from './Icon'
 import { useFavorites } from '../lib/favoritesContext'
@@ -85,10 +86,10 @@ export default function Navbar() {
           <div className="topbar-msg">
             <ShieldCheck className="w-3.5 h-3.5 inline text-emerald-400 flex-shrink-0" />
             <span className="topbar-text-desktop">
-              Nasarawa State University, Keffi — Safe Peer-to-Peer Student Marketplace.
+              Lincoln University College — Safe Peer-to-Peer Student Marketplace.
             </span>
             <span className="topbar-text-mobile">
-              NSUK Keffi · Safe Student Marketplace
+              Lincoln Campus · Safe Student Marketplace
             </span>
           </div>
           <div className="topbar-links">
@@ -112,13 +113,13 @@ export default function Navbar() {
       <header className="navbar">
         <div className="navbar-inner">
           {/* Brand Logo */}
-          <Link className="brand" to="/" aria-label="Lincoln NSUK Campus Market Home">
+          <Link className="brand" to="/" aria-label="Lincoln Campus Market Home">
             <div className="brand-badge" style={{ background: '#ffffff', padding: 2, border: '1.5px solid rgba(220, 38, 38, 0.4)' }}>
-              <img src="/images/lincoln-nsuk-logo.png" alt="Lincoln NSUK Crest" style={{ width: 28, height: 28, objectFit: 'contain' }} />
+              <img src="/images/lincoln-nsuk-logo.png" alt="Lincoln Campus Crest" style={{ width: 28, height: 28, objectFit: 'contain' }} />
             </div>
             <div className="brand-text-group">
               <span className="brand-name">Campus Market</span>
-              <span className="brand-campus-pill">Keffi</span>
+              <span className="brand-campus-pill">Lincoln</span>
             </div>
           </Link>
 
@@ -158,6 +159,12 @@ export default function Navbar() {
               className={location.pathname === '/deals' ? 'is-active' : ''}
             >
               My Deals
+            </Link>
+            <Link
+              to="/wallet"
+              className={location.pathname === '/wallet' ? 'is-active' : ''}
+            >
+              Wallet
             </Link>
             <Link
               to="/favorites"
@@ -264,11 +271,11 @@ export default function Navbar() {
             <div className="mobile-drawer-header">
               <Link to="/" className="brand" onClick={() => setMenuOpen(false)}>
                 <div className="brand-badge" style={{ background: '#ffffff', padding: 2, border: '1.5px solid rgba(220, 38, 38, 0.4)' }}>
-                  <img src="/images/lincoln-nsuk-logo.png" alt="Lincoln NSUK Crest" style={{ width: 26, height: 26, objectFit: 'contain' }} />
+                  <img src="/images/lincoln-nsuk-logo.png" alt="Lincoln Campus Crest" style={{ width: 26, height: 26, objectFit: 'contain' }} />
                 </div>
                 <div className="brand-text-group">
                   <span className="brand-name">Campus Market</span>
-                  <span className="brand-campus-pill">Keffi</span>
+                  <span className="brand-campus-pill">Lincoln</span>
                 </div>
               </Link>
               <button
@@ -301,14 +308,14 @@ export default function Navbar() {
                     <div className="mobile-user-name">{user?.name}</div>
                     <div className="mobile-user-sub">
                       <ShieldCheck className="w-3.5 h-3.5 text-emerald-500 inline mr-1 flex-shrink-0" />
-                      <span>{user?.student_id ? `NSUK ID: ${user.student_id}` : 'Verified Student'}</span>
+                      <span>{user?.student_id ? `Lincoln ID: ${user.student_id}` : 'Verified Student'}</span>
                     </div>
                   </div>
                 </div>
               ) : (
                 <div className="mobile-guest-card">
-                  <div className="mobile-guest-title">Join NSUK Campus Market</div>
-                  <p className="mobile-guest-desc">Buy, sell & trade safely with verified NSUK students.</p>
+                  <div className="mobile-guest-title">Join Lincoln Campus Market</div>
+                  <p className="mobile-guest-desc">Buy, sell & trade safely with verified Lincoln students.</p>
                   <div className="mobile-guest-actions">
                     <Link
                       to="/login"
@@ -391,6 +398,18 @@ export default function Navbar() {
                     <Handshake className="w-5 h-5 text-emerald-600" />
                   </div>
                   <span className="mobile-nav-text">My Deals & Escrow</span>
+                  <ChevronRight className="w-4 h-4 text-slate-400 ml-auto" />
+                </Link>
+
+                <Link
+                  to="/wallet"
+                  className={`mobile-nav-item ${location.pathname === '/wallet' ? 'is-active' : ''}`}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  <div className="mobile-nav-icon">
+                    <Wallet className="w-5 h-5 text-red-600" />
+                  </div>
+                  <span className="mobile-nav-text">Seller Wallet &amp; Earnings</span>
                   <ChevronRight className="w-4 h-4 text-slate-400 ml-auto" />
                 </Link>
 
@@ -482,7 +501,7 @@ export default function Navbar() {
                 </button>
               )}
               <div className="mobile-drawer-campus-tag">
-                Nasarawa State University Keffi · Safe Campus P2P
+                Lincoln University College, Nasarawa State · Safe Campus P2P
               </div>
             </div>
           </aside>
